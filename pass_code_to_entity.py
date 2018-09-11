@@ -86,15 +86,15 @@ if __name__ == "__main__":
                     print("error")
                     continue
 
-        print(len(related_method_list))        # json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
-        # json_conuter += 1
-        # if json_conuter > 100:
-        #     break
+        print(len(related_method_list))
         method_id_set = set()
         for r_m in related_method_list:
             method_id_set.add(r_m.method_id)
         print(method_id_set)
         json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
-
+        # json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
+        # json_conuter += 1
+        # if json_conuter > 100:
+        #     break
     with open('data.json', 'w') as outfile:
         json.dump(json_data, outfile)
