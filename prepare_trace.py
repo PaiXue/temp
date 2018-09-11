@@ -9,6 +9,5 @@ def read_json_file(file_path):
             print(dic)
 
 
-
 if __name__ == "__main__":
     code_trace_pd = read_json_file('code_trace.json')

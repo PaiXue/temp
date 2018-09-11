@@ -1,0 +1,833 @@
+[
+  {
+    "trace_id": 1,
+    "code": "public void start(BundleContext context) throws Exception {\n}",
+    "method_record_id": [
+      5986
+    ]
+  },
+  {
+    "trace_id": 2,
+    "code": "public void stop(BundleContext context) throws Exception {\n}",
+    "method_record_id": [
+      5990
+    ]
+  },
+  {
+    "trace_id": 3,
+    "code": "@Configuration\npublic Option[] configuration() throws IOException, URISyntaxException {\n    File base = new File(TARGET, \"test-bundles\");\n    return options(junitBundles(), bundle(new File(base, \"poi-bundle.jar\").toURI().toURL().toString()));\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 4,
+    "code": "@Test\npublic void testHSSF() throws Exception {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet s = wb.createSheet(\"OSGi\");\n    s.createRow(0).createCell(0).setCellValue(\"With OSGi\");\n    ByteArrayOutputStream baos = new ByteArrayOutputStream();\n    wb.write(baos);\n    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());\n    wb = new HSSFWorkbook(bais);\n    assertEquals(1, wb.getNumberOfSheets());\n    s = wb.getSheet(\"OSGi\");\n    assertEquals(\"With OSGi\", s.getRow(0).getCell(0).toString());\n}",
+    "method_record_id": [
+      6271
+    ]
+  },
+  {
+    "trace_id": 5,
+    "code": "@Override\nprotected void finalize() throws Throwable {\n// decRef();\n}",
+    "method_record_id": [
+      7556
+    ]
+  },
+  {
+    "trace_id": 6,
+    "code": "// protected native void incRef();\n// protected native void decRef();\n@Override\npublic native void close() throws IOException;",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 7,
+    "code": "/* (non-Javadoc)\n\t * @see java.io.OutputStream#write(int)\n\t */\n@Override\npublic native void write(int arg0) throws IOException;",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 8,
+    "code": "public static InputStream decrypt(final InputStream inputStream, final String pwd) throws Exception {\n    try {\n        POIFSFileSystem fs = new POIFSFileSystem(inputStream);\n        EncryptionInfo info = new EncryptionInfo(fs);\n        Decryptor d = Decryptor.getInstance(info);\n        if (!d.verifyPassword(pwd)) {\n            throw new RuntimeException(\"incorrect password\");\n        }\n        return d.getDataStream(fs);\n    } finally {\n        IOUtils.closeQuietly(inputStream);\n    }\n}",
+    "method_record_id": [
+      5032
+    ]
+  },
+  {
+    "trace_id": 9,
+    "code": "public void close() throws IOException {\n    fs.close();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 10,
+    "code": "public String tryAll(File wordfile) throws IOException, GeneralSecurityException {\n    // Load\n    BufferedReader r = new BufferedReader(new FileReader(wordfile));\n    long start = System.currentTimeMillis();\n    int count = 0;\n    // Try each password in turn, reporting progress\n    String valid = null;\n    String password = null;\n    while ((password = r.readLine()) != null) {\n        if (isValid(password)) {\n            valid = password;\n            break;\n        }\n        count++;\n        if (count % 1000 == 0) {\n            int secs = (int) ((System.currentTimeMillis() - start) / 1000);\n            System.out.println(\"Done \" + count + \" passwords, \" + secs + \" seconds, last password \" + password);\n        }\n    }\n    // Tidy and return (null if no match)\n    r.close();\n    return valid;\n}",
+    "method_record_id": [
+      5035,
+      5036
+    ]
+  },
+  {
+    "trace_id": 11,
+    "code": "public boolean isValid(String password) throws GeneralSecurityException {\n    return d.verifyPassword(password);\n}",
+    "method_record_id": [
+      5035,
+      3421
+    ]
+  },
+  {
+    "trace_id": 12,
+    "code": "public static void main(String[] args) throws Exception {\n    if (args.length < 2) {\n        System.err.println(\"Use:\");\n        System.err.println(\"  OOXMLPasswordsTry <file.ooxml> <wordlist>\");\n        System.exit(1);\n    }\n    File ooxml = new File(args[0]);\n    File words = new File(args[1]);\n    System.out.println(\"Trying passwords from \" + words + \" against \" + ooxml);\n    System.out.println();\n    OOXMLPasswordsTry pt = new OOXMLPasswordsTry(ooxml);\n    String password = pt.tryAll(words);\n    pt.close();\n    System.out.println();\n    if (password == null) {\n        System.out.println(\"Error - No password matched\");\n    } else {\n        System.out.println(\"Password found!\");\n        System.out.println(password);\n    }\n}",
+    "method_record_id": [
+      5036
+    ]
+  },
+  {
+    "trace_id": 13,
+    "code": "public static void checkTempFiles() throws IOException {\n    String tmpDir = System.getProperty(TempFile.JAVA_IO_TMPDIR) + \"/poifiles\";\n    File tempDir = new File(tmpDir);\n    if (tempDir.exists()) {\n        String[] tempFiles = tempDir.list();\n        if (tempFiles != null && tempFiles.length > 0) {\n            System.out.println(\"found files in poi temp dir \" + tempDir.getAbsolutePath());\n            for (String filename : tempFiles) {\n                System.out.println(\"file: \" + filename);\n            }\n        }\n    } else {\n        System.out.println(\"unable to find poi temp dir\");\n    }\n}",
+    "method_record_id": [
+      174
+    ]
+  },
+  {
+    "trace_id": 14,
+    "code": "/**\n * <p>Runs the example program. The application expects one or two\n * arguments:</p>\n *\n * <ol>\n *\n * <li><p>The first argument is the disk file name of the POI filesystem to\n * copy.</p></li>\n *\n * <li><p>The second argument is optional. If it is given, it is the name of\n * a disk file the copy of the POI filesystem will be written to. If it is\n * not given, the copy will be written to a temporary file which will be\n * deleted at the end of the program.</p></li>\n *\n * </ol>\n *\n * @param args Command-line arguments.\n * @exception MarkUnsupportedException if a POI document stream does not\n * support the mark() operation.\n * @exception NoPropertySetStreamException if the application tries to\n * create a property set from a POI document stream that is not a property\n * set stream.\n * @exception IOException if any I/O exception occurs.\n * @exception UnsupportedEncodingException if a character encoding is not\n * supported.\n */\npublic static void main(final String[] args) throws NoPropertySetStreamException, MarkUnsupportedException, UnsupportedEncodingException, IOException {\n    String originalFileName = null;\n    String copyFileName = null;\n    /* Check the command-line arguments. */\n    if (args.length == 1) {\n        originalFileName = args[0];\n        File f = TempFile.createTempFile(\"CopyOfPOIFileSystem-\", \".ole2\");\n        f.deleteOnExit();\n        copyFileName = f.getAbsolutePath();\n    } else if (args.length == 2) {\n        originalFileName = args[0];\n        copyFileName = args[1];\n    } else {\n        System.err.println(\"Usage: \" + CopyCompare.class.getName() + \"originPOIFS [copyPOIFS]\");\n        System.exit(1);\n    }\n    /* Read the origin POIFS using the eventing API. The real work is done\n         * in the class CopyFile which is registered here as a POIFSReader. */\n    final POIFSReader r = new POIFSReader();\n    final CopyFile cf = new CopyFile(copyFileName);\n    r.registerListener(cf);\n    r.setNotifyEmptyDirectories(true);\n    FileInputStream fis = new FileInputStream(originalFileName);\n    r.read(fis);\n    fis.close();\n    /* Write the new POIFS to disk. */\n    cf.close();\n    /* Read all documents from the original POI file system and compare them\n         * with the equivalent document from the copy. */\n    POIFSFileSystem opfs = null, cpfs = null;\n    try {\n        opfs = new POIFSFileSystem(new File(originalFileName));\n        cpfs = new POIFSFileSystem(new File(copyFileName));\n        final DirectoryEntry oRoot = opfs.getRoot();\n        final DirectoryEntry cRoot = cpfs.getRoot();\n        final StringBuffer messages = new StringBuffer();\n        if (equal(oRoot, cRoot, messages)) {\n            System.out.println(\"Equal\");\n        } else {\n            System.out.println(\"Not equal: \" + messages);\n        }\n    } finally {\n        IOUtils.closeQuietly(cpfs);\n        IOUtils.closeQuietly(opfs);\n    }\n}",
+    "method_record_id": [
+      69
+    ]
+  },
+  {
+    "trace_id": 15,
+    "code": "/**\n * <p>Compares two {@link DirectoryEntry} instances of a POI file system.\n * The directories must contain the same streams with the same names and\n * contents.</p>\n *\n * @param d1 The first directory.\n * @param d2 The second directory.\n * @param msg The method may append human-readable comparison messages to\n * this string buffer.\n * @return <code>true</code> if the directories are equal, else\n * <code>false</code>.\n * @exception MarkUnsupportedException if a POI document stream does not\n * support the mark() operation.\n * @exception NoPropertySetStreamException if the application tries to\n * create a property set from a POI document stream that is not a property\n * set stream.\n * @throws UnsupportedEncodingException\n * @exception IOException if any I/O exception occurs.\n */\nprivate static boolean equal(final DirectoryEntry d1, final DirectoryEntry d2, final StringBuffer msg) throws NoPropertySetStreamException, MarkUnsupportedException, UnsupportedEncodingException, IOException {\n    boolean equal = true;\n    /* Iterate over d1 and compare each entry with its counterpart in d2. */\n    for (final Entry e1 : d1) {\n        final String n1 = e1.getName();\n        if (!d2.hasEntry(n1)) {\n            msg.append(\"Document \\\"\" + n1 + \"\\\" exists only in the source.\\n\");\n            equal = false;\n            break;\n        }\n        Entry e2 = d2.getEntry(n1);\n        if (e1.isDirectoryEntry() && e2.isDirectoryEntry()) {\n            equal = equal((DirectoryEntry) e1, (DirectoryEntry) e2, msg);\n        } else if (e1.isDocumentEntry() && e2.isDocumentEntry()) {\n            equal = equal((DocumentEntry) e1, (DocumentEntry) e2, msg);\n        } else {\n            msg.append(\"One of \\\"\" + e1 + \"\\\" and \\\"\" + e2 + \"\\\" is a \" + \"document while the other one is a directory.\\n\");\n            equal = false;\n        }\n    }\n    /* Iterate over d2 just to make sure that there are no entries in d2\n         * that are not in d1. */\n    for (final Entry e2 : d2) {\n        final String n2 = e2.getName();\n        Entry e1 = null;\n        try {\n            e1 = d1.getEntry(n2);\n        } catch (FileNotFoundException ex) {\n            msg.append(\"Document \\\"\" + e2 + \"\\\" exitsts, document \\\"\" + e1 + \"\\\" does not.\\n\");\n            equal = false;\n            break;\n        }\n    }\n    return equal;\n}",
+    "method_record_id": [
+      3464,
+      3466,
+      3475,
+      3477
+    ]
+  },
+  {
+    "trace_id": 16,
+    "code": "/**\n * <p>Compares two {@link DocumentEntry} instances of a POI file system.\n * Documents that are not property set streams must be bitwise identical.\n * Property set streams must be logically equal.</p>\n *\n * @param d1 The first document.\n * @param d2 The second document.\n * @param msg The method may append human-readable comparison messages to\n * this string buffer.\n * @return <code>true</code> if the documents are equal, else\n * <code>false</code>.\n * @exception MarkUnsupportedException if a POI document stream does not\n * support the mark() operation.\n * @exception NoPropertySetStreamException if the application tries to\n * create a property set from a POI document stream that is not a property\n * set stream.\n * @throws UnsupportedEncodingException\n * @exception IOException if any I/O exception occurs.\n */\nprivate static boolean equal(final DocumentEntry d1, final DocumentEntry d2, final StringBuffer msg) throws NoPropertySetStreamException, MarkUnsupportedException, UnsupportedEncodingException, IOException {\n    final DocumentInputStream dis1 = new DocumentInputStream(d1);\n    final DocumentInputStream dis2 = new DocumentInputStream(d2);\n    try {\n        if (PropertySet.isPropertySetStream(dis1) && PropertySet.isPropertySetStream(dis2)) {\n            final PropertySet ps1 = PropertySetFactory.create(dis1);\n            final PropertySet ps2 = PropertySetFactory.create(dis2);\n            if (!ps1.equals(ps2)) {\n                msg.append(\"Property sets are not equal.\\n\");\n                return false;\n            }\n        } else {\n            int i1, i2;\n            do {\n                i1 = dis1.read();\n                i2 = dis2.read();\n                if (i1 != i2) {\n                    msg.append(\"Documents are not equal.\\n\");\n                    return false;\n                }\n            } while (i1 > -1);\n        }\n    } finally {\n        dis2.close();\n        dis1.close();\n    }\n    return true;\n}",
+    "method_record_id": [
+      3765,
+      5485,
+      5263
+    ]
+  },
+  {
+    "trace_id": 17,
+    "code": "/**\n * <p>The method is called by POI's eventing API for each file in the\n * origin POIFS.</p>\n */\n@Override\npublic void processPOIFSReaderEvent(final POIFSReaderEvent event) {\n    /* The following declarations are shortcuts for accessing the\n             * \"event\" object. */\n    final POIFSDocumentPath path = event.getPath();\n    final String name = event.getName();\n    final DocumentInputStream stream = event.getStream();\n    Throwable t = null;\n    try {\n        /* Find out whether the current document is a property set\n                 * stream or not. */\n        if (stream != null && PropertySet.isPropertySetStream(stream)) {\n            /* Yes, the current document is a property set stream.\n                     * Let's create a PropertySet instance from it. */\n            PropertySet ps = null;\n            try {\n                ps = PropertySetFactory.create(stream);\n            } catch (NoPropertySetStreamException ex) {\n            /* This exception will not be thrown because we already\n                         * checked above. */\n            }\n            /* Copy the property set to the destination POI file\n                     * system. */\n            copy(poiFs, path, name, ps);\n        } else {\n            /* No, the current document is not a property set stream. We\n                     * copy it unmodified to the destination POIFS. */\n            copy(poiFs, path, name, stream);\n        }\n    } catch (MarkUnsupportedException ex) {\n        t = ex;\n    } catch (IOException ex) {\n        t = ex;\n    } catch (WritingNotSupportedException ex) {\n        t = ex;\n    }\n    /* According to the definition of the processPOIFSReaderEvent method\n             * we cannot pass checked exceptions to the caller. The following\n             * lines check whether a checked exception occurred and throws an\n             * unchecked exception. The message of that exception is that of\n             * the underlying checked exception. */\n    if (t != null) {\n        throw new HPSFRuntimeException(\"Could not read file \\\"\" + path + \"/\" + name, t);\n    }\n}",
+    "method_record_id": [
+      4217,
+      5485,
+      6110,
+      5263
+    ]
+  },
+  {
+    "trace_id": 18,
+    "code": "/**\n * <p>Writes a {@link PropertySet} to a POI filesystem.</p>\n *\n * @param poiFs The POI filesystem to write to.\n * @param path The file's path in the POI filesystem.\n * @param name The file's name in the POI filesystem.\n * @param ps The property set to write.\n * @throws WritingNotSupportedException\n * @throws IOException\n */\npublic void copy(final POIFSFileSystem poiFs, final POIFSDocumentPath path, final String name, final PropertySet ps) throws WritingNotSupportedException, IOException {\n    final DirectoryEntry de = getPath(poiFs, path);\n    final MutablePropertySet mps = new MutablePropertySet(ps);\n    de.createDocument(name, mps.toInputStream());\n}",
+    "method_record_id": [
+      5250,
+      3463
+    ]
+  },
+  {
+    "trace_id": 19,
+    "code": "/**\n * <p>Copies the bytes from a {@link DocumentInputStream} to a new\n * stream in a POI filesystem.</p>\n *\n * @param poiFs The POI filesystem to write to.\n * @param path The source document's path.\n * @param name The source document's name.\n * @param stream The stream containing the source document.\n * @throws IOException\n */\npublic void copy(final POIFSFileSystem poiFs, final POIFSDocumentPath path, final String name, final DocumentInputStream stream) throws IOException {\n    // create the directories to the document\n    final DirectoryEntry de = getPath(poiFs, path);\n    // check the parameters after the directories have been created\n    if (stream == null || name == null) {\n        // Empty directory\n        return;\n    }\n    final ByteArrayOutputStream out = new ByteArrayOutputStream();\n    int c;\n    while ((c = stream.read()) != -1) {\n        out.write(c);\n    }\n    stream.close();\n    out.close();\n    final InputStream in = new ByteArrayInputStream(out.toByteArray());\n    de.createDocument(name, in);\n}",
+    "method_record_id": [
+      9,
+      3463
+    ]
+  },
+  {
+    "trace_id": 20,
+    "code": "/**\n * <p>Writes the POI file system to a disk file.</p>\n *\n * @throws FileNotFoundException\n * @throws IOException\n */\npublic void close() throws FileNotFoundException, IOException {\n    out = new FileOutputStream(dstName);\n    poiFs.writeFilesystem(out);\n    out.close();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 21,
+    "code": "/**\n * <p>Ensures that the directory hierarchy for a document in a POI\n * fileystem is in place. When a document is to be created somewhere in\n * a POI filesystem its directory must be created first. This method\n * creates all directories between the POI filesystem root and the\n * directory the document should belong to which do not yet exist.</p>\n *\n * <p>Unfortunately POI does not offer a simple method to interrogate\n * the POIFS whether a certain child node (file or directory) exists in\n * a directory. However, since we always start with an empty POIFS which\n * contains the root directory only and since each directory in the\n * POIFS is created by this method we can maintain the POIFS's directory\n * hierarchy ourselves: The {@link DirectoryEntry} of each directory\n * created is stored in a {@link Map}. The directories' path names map\n * to the corresponding {@link DirectoryEntry} instances.</p>\n *\n * @param poiFs The POI filesystem the directory hierarchy is created\n * in, if needed.\n * @param path The document's path. This method creates those directory\n * components of this hierarchy which do not yet exist.\n * @return The directory entry of the document path's parent. The caller\n * should use this {@link DirectoryEntry} to create documents in it.\n */\npublic DirectoryEntry getPath(final POIFSFileSystem poiFs, final POIFSDocumentPath path) {\n    try {\n        /* Check whether this directory has already been created. */\n        final String s = path.toString();\n        DirectoryEntry de = paths.get(s);\n        if (de != null)\n            /* Yes: return the corresponding DirectoryEntry. */\n            return de;\n        /* No: We have to create the directory - or return the root's\n                 * DirectoryEntry. */\n        int l = path.length();\n        if (l == 0) {\n            /* Get the root directory. It does not have to be created\n                     * since it always exists in a POIFS. */\n            de = poiFs.getRoot();\n        } else {\n            /* Create a subordinate directory. The first step is to\n                     * ensure that the parent directory exists: */\n            de = getPath(poiFs, path.getParent());\n            /* Now create the target directory: */\n            de = de.createDirectory(path.getComponent(path.length() - 1));\n        }\n        paths.put(s, de);\n        return de;\n    } catch (IOException ex) {\n        /* This exception will be thrown if the directory already\n                 * exists. However, since we have full control about directory\n                 * creation we can ensure that this will never happen. */\n        ex.printStackTrace(System.err);\n        throw new RuntimeException(ex.toString());\n    /* FIXME (2): Replace the previous line by the following once we\n                 * no longer need JDK 1.3 compatibility. */\n    // throw new RuntimeException(ex);\n    }\n}",
+    "method_record_id": [
+      69,
+      3462
+    ]
+  },
+  {
+    "trace_id": 22,
+    "code": "/**\n * <p>Main method - see class description.</p>\n *\n * @param args The command-line parameters.\n * @throws IOException\n * @throws MarkUnsupportedException\n * @throws NoPropertySetStreamException\n * @throws UnexpectedPropertySetTypeException\n * @throws WritingNotSupportedException\n */\npublic static void main(final String[] args) throws IOException, NoPropertySetStreamException, MarkUnsupportedException, UnexpectedPropertySetTypeException, WritingNotSupportedException {\n    /* Read the name of the POI filesystem to modify from the command line.\n         * For brevity to boundary check is performed on the command-line\n         * arguments. */\n    File summaryFile = new File(args[0]);\n    /* Open the POI filesystem. */\n    NPOIFSFileSystem poifs = new NPOIFSFileSystem(summaryFile, false);\n    /* Read the summary information. */\n    DirectoryEntry dir = poifs.getRoot();\n    SummaryInformation si;\n    try {\n        si = (SummaryInformation) PropertySetFactory.create(dir, SummaryInformation.DEFAULT_STREAM_NAME);\n    } catch (FileNotFoundException ex) {\n        // There is no summary information yet. We have to create a new one\n        si = PropertySetFactory.newSummaryInformation();\n    }\n    /* Change the author to \"Rainer Klute\". Any former author value will\n         * be lost. If there has been no author yet, it will be created. */\n    si.setAuthor(\"Rainer Klute\");\n    System.out.println(\"Author changed to \" + si.getAuthor() + \".\");\n    /* Handling the document summary information is analogous to handling\n         * the summary information. An additional feature, however, are the\n         * custom properties. */\n    /* Read the document summary information. */\n    DocumentSummaryInformation dsi;\n    try {\n        dsi = (DocumentSummaryInformation) PropertySetFactory.create(dir, DocumentSummaryInformation.DEFAULT_STREAM_NAME);\n    } catch (FileNotFoundException ex) {\n        /* There is no document summary information yet. We have to create a\n             * new one. */\n        dsi = PropertySetFactory.newDocumentSummaryInformation();\n    }\n    /* Change the category to \"POI example\". Any former category value will\n         * be lost. If there has been no category yet, it will be created. */\n    dsi.setCategory(\"POI example\");\n    System.out.println(\"Category changed to \" + dsi.getCategory() + \".\");\n    /* Read the custom properties. If there are no custom properties yet,\n         * the application has to create a new CustomProperties object. It will\n         * serve as a container for custom properties. */\n    CustomProperties customProperties = dsi.getCustomProperties();\n    if (customProperties == null)\n        customProperties = new CustomProperties();\n    /* Insert some custom properties into the container. */\n    customProperties.put(\"Key 1\", \"Value 1\");\n    customProperties.put(\"Schl\\u00fcssel 2\", \"Wert 2\");\n    customProperties.put(\"Sample Number\", new Integer(12345));\n    customProperties.put(\"Sample Boolean\", Boolean.TRUE);\n    customProperties.put(\"Sample Date\", new Date());\n    /* Read a custom property. */\n    Object value = customProperties.get(\"Sample Number\");\n    System.out.println(\"Custom Sample Number is now \" + value);\n    /* Write the custom properties back to the document summary\n         * information. */\n    dsi.setCustomProperties(customProperties);\n    /* Write the summary information and the document summary information\n         * to the POI filesystem. */\n    si.write(dir, SummaryInformation.DEFAULT_STREAM_NAME);\n    dsi.write(dir, DocumentSummaryInformation.DEFAULT_STREAM_NAME);\n    /* Write the POI filesystem back to the original file. Please note that\n         * in production code you should take care when write directly to the \n         * origin, to make sure you don't loose things on error */\n    poifs.writeFilesystem();\n    poifs.close();\n}",
+    "method_record_id": [
+      5252,
+      69,
+      5486,
+      5487,
+      5488,
+      5425
+    ]
+  },
+  {
+    "trace_id": 23,
+    "code": "/**\n * <p>Runs the example program.</p>\n *\n * @param args Command-line arguments (unused).\n * @throws IOException if any I/O exception occurs.\n */\npublic static void main(final String[] args) throws IOException {\n    final String filename = args[0];\n    POIFSReader r = new POIFSReader();\n    /* Register a listener for *all* documents. */\n    r.registerListener(new MyPOIFSReaderListener());\n    r.read(new FileInputStream(filename));\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 24,
+    "code": "@Override\npublic void processPOIFSReaderEvent(final POIFSReaderEvent event) {\n    PropertySet ps = null;\n    try {\n        ps = PropertySetFactory.create(event.getStream());\n    } catch (NoPropertySetStreamException ex) {\n        out(\"No property set stream: \\\"\" + event.getPath() + event.getName() + \"\\\"\");\n        return;\n    } catch (Exception ex) {\n        throw new RuntimeException(\"Property set stream \\\"\" + event.getPath() + event.getName() + \"\\\": \" + ex);\n    }\n    /* Print the name of the property set stream: */\n    out(\"Property set stream \\\"\" + event.getPath() + event.getName() + \"\\\":\");\n    /* Print the number of sections: */\n    final long sectionCount = ps.getSectionCount();\n    out(\"   No. of sections: \" + sectionCount);\n    /* Print the list of sections: */\n    List<Section> sections = ps.getSections();\n    int nr = 0;\n    for (Iterator<Section> i = sections.iterator(); i.hasNext(); ) {\n        /* Print a single section: */\n        Section sec = i.next();\n        out(\"   Section \" + nr++ + \":\");\n        String s = hex(sec.getFormatID().getBytes());\n        s = s.substring(0, s.length() - 1);\n        out(\"      Format ID: \" + s);\n        /* Print the number of properties in this section. */\n        int propertyCount = sec.getPropertyCount();\n        out(\"      No. of properties: \" + propertyCount);\n        /* Print the properties: */\n        Property[] properties = sec.getProperties();\n        for (int i2 = 0; i2 < properties.length; i2++) {\n            /* Print a single property: */\n            Property p = properties[i2];\n            long id = p.getID();\n            long type = p.getType();\n            Object value = p.getValue();\n            out(\"      Property ID: \" + id + \", type: \" + type + \", value: \" + value);\n        }\n    }\n}",
+    "method_record_id": [
+      5218,
+      6151,
+      5260,
+      5273,
+      5242,
+      5276,
+      6110
+    ]
+  },
+  {
+    "trace_id": 25,
+    "code": "static void out(final String msg) {\n    System.out.println(msg);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 26,
+    "code": "static String hex(final byte[] bytes) {\n    return HexDump.dump(bytes, 0L, 0);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 27,
+    "code": "/**\n * <p>Runs the example program.</p>\n *\n * @param args Command-line arguments. The first command-line argument must\n * be the name of a POI filesystem to read.\n * @throws IOException if any I/O exception occurs.\n */\npublic static void main(final String[] args) throws IOException {\n    final String filename = args[0];\n    POIFSReader r = new POIFSReader();\n    r.registerListener(new MyPOIFSReaderListener(), \"\\005SummaryInformation\");\n    r.read(new FileInputStream(filename));\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 28,
+    "code": "@Override\npublic void processPOIFSReaderEvent(final POIFSReaderEvent event) {\n    SummaryInformation si = null;\n    try {\n        si = (SummaryInformation) PropertySetFactory.create(event.getStream());\n    } catch (Exception ex) {\n        throw new RuntimeException(\"Property set stream \\\"\" + event.getPath() + event.getName() + \"\\\": \" + ex);\n    }\n    final String title = si.getTitle();\n    if (title != null)\n        System.out.println(\"Title: \\\"\" + title + \"\\\"\");\n    else\n        System.out.println(\"Document has no title.\");\n}",
+    "method_record_id": [
+      6110
+    ]
+  },
+  {
+    "trace_id": 29,
+    "code": "/**\n * <p>Runs the example program.</p>\n *\n * @param args Command-line arguments. The first command-line argument must\n * be the name of a POI filesystem to read.\n * @throws IOException if any I/O exception occurs.\n */\npublic static void main(final String[] args) throws IOException {\n    /* Check whether we have exactly two command-line arguments. */\n    if (args.length != 2) {\n        System.err.println(\"Usage: \" + WriteAuthorAndTitle.class.getName() + \" originPOIFS destinationPOIFS\");\n        System.exit(1);\n    }\n    /* Read the names of the origin and destination POI filesystems. */\n    final String srcName = args[0];\n    final String dstName = args[1];\n    /* Read the origin POIFS using the eventing API. The real work is done\n         * in the class ModifySICopyTheRest which is registered here as a\n         * POIFSReader. */\n    final POIFSReader r = new POIFSReader();\n    final ModifySICopyTheRest msrl = new ModifySICopyTheRest(dstName);\n    r.registerListener(msrl);\n    FileInputStream fis = new FileInputStream(srcName);\n    r.read(fis);\n    fis.close();\n    /* Write the new POIFS to disk. */\n    msrl.close();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 30,
+    "code": "/**\n * <p>The method is called by POI's eventing API for each file in the\n * origin POIFS.</p>\n */\n@Override\npublic void processPOIFSReaderEvent(final POIFSReaderEvent event) {\n    /* The following declarations are shortcuts for accessing the\n             * \"event\" object. */\n    final POIFSDocumentPath path = event.getPath();\n    final String name = event.getName();\n    final DocumentInputStream stream = event.getStream();\n    Throwable t = null;\n    try {\n        /* Find out whether the current document is a property set\n                 * stream or not. */\n        if (PropertySet.isPropertySetStream(stream)) {\n            try {\n                /* Yes, the current document is a property set stream.\n                         * Let's create a PropertySet instance from it. */\n                PropertySet ps = PropertySetFactory.create(stream);\n                /* Now we know that we really have a property set. The next\n                         * step is to find out whether it is a summary information\n                         * or not. */\n                if (ps.isSummaryInformation()) {\n                    /* Yes, it is a summary information. We will modify it\n                             * and write the result to the destination POIFS. */\n                    editSI(poiFs, path, name, ps);\n                } else {\n                    /* No, it is not a summary information. We don't care\n                             * about its internals and copy it unmodified to the\n                             * destination POIFS. */\n                    copy(poiFs, path, name, ps);\n                }\n            } catch (NoPropertySetStreamException ex) {\n            /* This exception will not be thrown because we already\n                         * checked above. */\n            }\n        } else {\n            /* No, the current document is not a property set stream. We\n                     * copy it unmodified to the destination POIFS. */\n            copy(poiFs, event.getPath(), event.getName(), stream);\n        }\n    } catch (MarkUnsupportedException ex) {\n        t = ex;\n    } catch (IOException ex) {\n        t = ex;\n    } catch (WritingNotSupportedException ex) {\n        t = ex;\n    }\n    /* According to the definition of the processPOIFSReaderEvent method\n             * we cannot pass checked exceptions to the caller. The following\n             * lines check whether a checked exception occured and throws an\n             * unchecked exception. The message of that exception is that of\n             * the underlying checked exception. */\n    if (t != null) {\n        throw new HPSFRuntimeException(\"Could not read file \\\"\" + path + \"/\" + name, t);\n    }\n}",
+    "method_record_id": [
+      5487,
+      5263,
+      4217,
+      5245,
+      6110
+    ]
+  },
+  {
+    "trace_id": 31,
+    "code": "/**\n * <p>Receives a summary information property set modifies (or creates)\n * its \"author\" and \"title\" properties and writes the result under the\n * same path and name as the origin to a destination POI filesystem.</p>\n *\n * @param poiFs The POI filesystem to write to.\n * @param path The original (and destination) stream's path.\n * @param name The original (and destination) stream's name.\n * @param si The property set. It should be a summary information\n * property set.\n * @throws IOException\n * @throws WritingNotSupportedException\n */\npublic void editSI(final POIFSFileSystem poiFs, final POIFSDocumentPath path, final String name, final PropertySet si) throws WritingNotSupportedException, IOException {\n    /* Get the directory entry for the target stream. */\n    final DirectoryEntry de = getPath(poiFs, path);\n    /* Create a mutable property set as a copy of the original read-only\n             * property set. */\n    final MutablePropertySet mps = new MutablePropertySet(si);\n    /* Retrieve the section containing the properties to modify. A\n             * summary information property set contains exactly one section. */\n    final MutableSection s = (MutableSection) mps.getSections().get(0);\n    /* Set the properties. */\n    s.setProperty(PropertyIDMap.PID_AUTHOR, Variant.VT_LPSTR, \"Rainer Klute\");\n    s.setProperty(PropertyIDMap.PID_TITLE, Variant.VT_LPWSTR, \"Test\");\n    /* Create an input stream containing the bytes the property set\n             * stream consists of. */\n    final InputStream pss = mps.toInputStream();\n    /* Write the property set stream to the POIFS. */\n    de.createDocument(name, pss);\n}",
+    "method_record_id": [
+      3463,
+      5242,
+      5250
+    ]
+  },
+  {
+    "trace_id": 32,
+    "code": "/**\n * <p>Writes a {@link PropertySet} to a POI filesystem. This method is\n * simpler than {@link #editSI} because the origin property set has just\n * to be copied.</p>\n *\n * @param poiFs The POI filesystem to write to.\n * @param path The file's path in the POI filesystem.\n * @param name The file's name in the POI filesystem.\n * @param ps The property set to write.\n * @throws WritingNotSupportedException\n * @throws IOException\n */\npublic void copy(final POIFSFileSystem poiFs, final POIFSDocumentPath path, final String name, final PropertySet ps) throws WritingNotSupportedException, IOException {\n    final DirectoryEntry de = getPath(poiFs, path);\n    final MutablePropertySet mps = new MutablePropertySet(ps);\n    de.createDocument(name, mps.toInputStream());\n}",
+    "method_record_id": [
+      5250,
+      3463
+    ]
+  },
+  {
+    "trace_id": 33,
+    "code": "/**\n * <p>Copies the bytes from a {@link DocumentInputStream} to a new\n * stream in a POI filesystem.</p>\n *\n * @param poiFs The POI filesystem to write to.\n * @param path The source document's path.\n * @param name The source document's name.\n * @param stream The stream containing the source document.\n * @throws IOException\n */\npublic void copy(final POIFSFileSystem poiFs, final POIFSDocumentPath path, final String name, final DocumentInputStream stream) throws IOException {\n    final DirectoryEntry de = getPath(poiFs, path);\n    final ByteArrayOutputStream out = new ByteArrayOutputStream();\n    int c;\n    while ((c = stream.read()) != -1) out.write(c);\n    stream.close();\n    out.close();\n    final InputStream in = new ByteArrayInputStream(out.toByteArray());\n    de.createDocument(name, in);\n}",
+    "method_record_id": [
+      9,
+      3463
+    ]
+  },
+  {
+    "trace_id": 34,
+    "code": "/**\n * <p>Writes the POI file system to a disk file.</p>\n *\n * @throws FileNotFoundException\n * @throws IOException\n */\npublic void close() throws FileNotFoundException, IOException {\n    out = new FileOutputStream(dstName);\n    poiFs.writeFilesystem(out);\n    out.close();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 35,
+    "code": "/**\n * <p>Ensures that the directory hierarchy for a document in a POI\n * fileystem is in place. When a document is to be created somewhere in\n * a POI filesystem its directory must be created first. This method\n * creates all directories between the POI filesystem root and the\n * directory the document should belong to which do not yet exist.</p>\n *\n * <p>Unfortunately POI does not offer a simple method to interrogate\n * the POIFS whether a certain child node (file or directory) exists in\n * a directory. However, since we always start with an empty POIFS which\n * contains the root directory only and since each directory in the\n * POIFS is created by this method we can maintain the POIFS's directory\n * hierarchy ourselves: The {@link DirectoryEntry} of each directory\n * created is stored in a {@link Map}. The directories' path names map\n * to the corresponding {@link DirectoryEntry} instances.</p>\n *\n * @param poiFs The POI filesystem the directory hierarchy is created\n * in, if needed.\n * @param path The document's path. This method creates those directory\n * components of this hierarchy which do not yet exist.\n * @return The directory entry of the document path's parent. The caller\n * should use this {@link DirectoryEntry} to create documents in it.\n */\npublic DirectoryEntry getPath(final POIFSFileSystem poiFs, final POIFSDocumentPath path) {\n    try {\n        /* Check whether this directory has already been created. */\n        final String s = path.toString();\n        DirectoryEntry de = paths.get(s);\n        if (de != null)\n            /* Yes: return the corresponding DirectoryEntry. */\n            return de;\n        /* No: We have to create the directory - or return the root's\n                 * DirectoryEntry. */\n        int l = path.length();\n        if (l == 0)\n            /* Get the root directory. It does not have to be created\n                     * since it always exists in a POIFS. */\n            de = poiFs.getRoot();\n        else {\n            /* Create a subordinate directory. The first step is to\n                     * ensure that the parent directory exists: */\n            de = getPath(poiFs, path.getParent());\n            /* Now create the target directory: */\n            de = de.createDirectory(path.getComponent(path.length() - 1));\n        }\n        paths.put(s, de);\n        return de;\n    } catch (IOException ex) {\n        /* This exception will be thrown if the directory already\n                 * exists. However, since we have full control about directory\n                 * creation we can ensure that this will never happen. */\n        ex.printStackTrace(System.err);\n        throw new RuntimeException(ex);\n    }\n}",
+    "method_record_id": [
+      69,
+      3462
+    ]
+  },
+  {
+    "trace_id": 36,
+    "code": "/**\n * <p>Runs the example program.</p>\n *\n * @param args Command-line arguments. The first and only command-line\n * argument is the name of the POI file system to create.\n * @throws IOException if any I/O exception occurs.\n * @throws WritingNotSupportedException if HPSF does not (yet) support\n * writing a certain property type.\n */\npublic static void main(final String[] args) throws WritingNotSupportedException, IOException {\n    /* Check whether we have exactly one command-line argument. */\n    if (args.length != 1) {\n        System.err.println(\"Usage: \" + WriteTitle.class.getName() + \"destinationPOIFS\");\n        System.exit(1);\n    }\n    final String fileName = args[0];\n    /* Create a mutable property set. Initially it contains a single section\n         * with no properties. */\n    final MutablePropertySet mps = new MutablePropertySet();\n    /* Retrieve the section the property set already contains. */\n    final MutableSection ms = (MutableSection) mps.getSections().get(0);\n    /* Turn the property set into a summary information property. This is\n         * done by setting the format ID of its first section to\n         * SectionIDMap.SUMMARY_INFORMATION_ID. */\n    ms.setFormatID(SectionIDMap.SUMMARY_INFORMATION_ID);\n    /* Create an empty property. */\n    final MutableProperty p = new MutableProperty();\n    /* Fill the property with appropriate settings so that it specifies the\n         * document's title. */\n    p.setID(PropertyIDMap.PID_TITLE);\n    p.setType(Variant.VT_LPWSTR);\n    p.setValue(\"Sample title\");\n    /* Place the property into the section. */\n    ms.setProperty(p);\n    /* Create the POI file system the property set is to be written to. */\n    final POIFSFileSystem poiFs = new POIFSFileSystem();\n    /* For writing the property set into a POI file system it has to be\n         * handed over to the POIFS.createDocument() method as an input stream\n         * which produces the bytes making out the property set stream. */\n    final InputStream is = mps.toInputStream();\n    /* Create the summary information property set in the POI file\n         * system. It is given the default name most (if not all) summary\n         * information property sets have. */\n    poiFs.createDocument(is, SummaryInformation.DEFAULT_STREAM_NAME);\n    /* Write the whole POI file system to a disk file. */\n    FileOutputStream fos = new FileOutputStream(fileName);\n    poiFs.writeFilesystem(fos);\n    fos.close();\n    poiFs.close();\n}",
+    "method_record_id": [
+      3463,
+      5242,
+      5284,
+      5250
+    ]
+  },
+  {
+    "trace_id": 37,
+    "code": "public static void main(String[] args) throws IOException {\n    SlideShow<?, ?> ppt = new HSLFSlideShow();\n    // SlideShow<?,?> ppt = new XMLSlideShow();\n    ppt.setPageSize(new Dimension(720, 540));\n    slide1(ppt);\n    slide2(ppt);\n    slide3(ppt);\n    slide4(ppt);\n    slide5(ppt);\n    slide6(ppt);\n    slide7(ppt);\n    slide8(ppt);\n    slide9(ppt);\n    slide10(ppt);\n    slide11(ppt);\n    slide12(ppt);\n    String ext = ppt.getClass().getName().contains(\"HSLF\") ? \"ppt\" : \"pptx\";\n    FileOutputStream out = new FileOutputStream(\"apachecon_eu_08.\" + ext);\n    ppt.write(out);\n    out.close();\n    ppt.close();\n}",
+    "method_record_id": [
+      9,
+      3596,
+      5548,
+      5550,
+      5551,
+      5552,
+      5553,
+      5554,
+      5555,
+      5556,
+      5557,
+      5558,
+      5559,
+      5549
+    ]
+  },
+  {
+    "trace_id": 38,
+    "code": "public static void slide1(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.CENTER_TITLE);\n    box1.setText(\"POI-HSLF\");\n    box1.setAnchor(new Rectangle(54, 78, 612, 115));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.CENTER_BODY);\n    box2.setText(\"Java API To Access Microsoft PowerPoint Format Files\");\n    box2.setAnchor(new Rectangle(108, 204, 504, 138));\n    TextBox<?, ?> box3 = slide.createTextBox();\n    box3.getTextParagraphs().get(0).getTextRuns().get(0).setFontSize(32d);\n    box3.setText(\"Yegor Kozlov\\r\" + \"yegor - apache - org\");\n    box3.setHorizontalCentered(true);\n    box3.setAnchor(new Rectangle(206, 348, 310, 84));\n}",
+    "method_record_id": [
+      3618,
+      3586,
+      3622,
+      3624,
+      5554,
+      3548
+    ]
+  },
+  {
+    "trace_id": 39,
+    "code": "public static void slide2(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"What is HSLF?\");\n    box1.setAnchor(new Rectangle(36, 21, 648, 90));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.BODY);\n    box2.setText(\"HorribleSLideshowFormat is the POI Project's pure Java implementation \" + \"of the Powerpoint binary file format. \\r\" + \"POI sub-project since 2005\\r\" + \"Started by Nick Burch, Yegor Kozlov joined soon after\");\n    box2.setAnchor(new Rectangle(36, 126, 648, 356));\n}",
+    "method_record_id": [
+      3624,
+      3586,
+      3548,
+      5556
+    ]
+  },
+  {
+    "trace_id": 40,
+    "code": "public static void slide3(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"HSLF in a Nutshell\");\n    box1.setAnchor(new Rectangle(36, 15, 648, 65));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.BODY);\n    box2.setText(\"HSLF provides a way to read, create and modify MS PowerPoint presentations\\r\" + \"Pure Java API - you don't need PowerPoint to read and write *.ppt files\\r\" + \"Comprehensive support of PowerPoint objects\\r\" + \"Rich text\\r\" + \"Tables\\r\" + \"Shapes\\r\" + \"Pictures\\r\" + \"Master slides\\r\" + \"Access to low level data structures\");\n    List<? extends TextParagraph<?, ?, ?>> tp = box2.getTextParagraphs();\n    for (int i : new byte[] { 0, 1, 2, 8 }) {\n        tp.get(i).getTextRuns().get(0).setFontSize(28d);\n    }\n    for (int i : new byte[] { 3, 4, 5, 6, 7 }) {\n        tp.get(i).getTextRuns().get(0).setFontSize(24d);\n        tp.get(i).setIndentLevel(1);\n    }\n    box2.setAnchor(new Rectangle(36, 80, 648, 400));\n}",
+    "method_record_id": [
+      3618,
+      3586,
+      3624,
+      5550,
+      3548
+    ]
+  },
+  {
+    "trace_id": 41,
+    "code": "public static void slide4(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    String[][] txt1 = { { \"Note\" }, { \"This presentation was created programmatically using POI HSLF\" } };\n    TableShape<?, ?> table1 = slide.createTable(2, 1);\n    for (int i = 0; i < txt1.length; i++) {\n        for (int j = 0; j < txt1[i].length; j++) {\n            TableCell<?, ?> cell = table1.getCell(i, j);\n            cell.setText(txt1[i][j]);\n            TextRun rt = cell.getTextParagraphs().get(0).getTextRuns().get(0);\n            rt.setFontSize(10d);\n            rt.setFontFamily(\"Arial\");\n            rt.setBold(true);\n            if (i == 0) {\n                rt.setFontSize(32d);\n                rt.setFontColor(Color.white);\n                cell.setFillColor(new Color(0, 153, 204));\n            } else {\n                rt.setFontSize(28d);\n                cell.setFillColor(new Color(235, 239, 241));\n            }\n            cell.setVerticalAlignment(VerticalAlignment.MIDDLE);\n        }\n    }\n    DrawTableShape dts = new DrawTableShape(table1);\n    dts.setAllBorders(1.0, Color.black);\n    dts.setOutsideBorders(4.0);\n    table1.setColumnWidth(0, 450);\n    table1.setRowHeight(0, 50);\n    table1.setRowHeight(1, 80);\n    Dimension dim = ppt.getPageSize();\n    Rectangle2D oldAnchor = table1.getAnchor();\n    table1.setAnchor(new Rectangle2D.Double((dim.width - 450) / 2d, 100, oldAnchor.getWidth(), oldAnchor.getHeight()));\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setHorizontalCentered(true);\n    box1.getTextParagraphs().get(0).getTextRuns().get(0).setFontSize(24d);\n    box1.setText(\"The source code is available at\\r\" + \"http://people.apache.org/~yegor/apachecon_eu08/\");\n    box1.setAnchor(new Rectangle(80, 356, 553, 65));\n}",
+    "method_record_id": [
+      3586,
+      3618,
+      3622,
+      3563,
+      5557,
+      3548
+    ]
+  },
+  {
+    "trace_id": 42,
+    "code": "public static void slide5(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"HSLF in Action - 1\\rData Extraction\");\n    box1.setAnchor(new Rectangle(36, 21, 648, 100));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.BODY);\n    box2.setText(\"Text from slides and notes\\r\" + \"Images\\r\" + \"Shapes and their properties (type, position in the slide, color, font, etc.)\");\n    box2.setAnchor(new Rectangle(36, 150, 648, 300));\n}",
+    "method_record_id": [
+      3624,
+      3586,
+      3548,
+      5551
+    ]
+  },
+  {
+    "trace_id": 43,
+    "code": "public static void slide6(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"HSLF in Action - 2\");\n    box1.setAnchor(new Rectangle(36, 20, 648, 90));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.getTextParagraphs().get(0).getTextRuns().get(0).setFontSize(18d);\n    box2.setText(\"Creating a simple presentation from scratch\");\n    box2.setAnchor(new Rectangle(170, 100, 364, 30));\n    TextBox<?, ?> box3 = slide.createTextBox();\n    TextRun rt3 = box3.getTextParagraphs().get(0).getTextRuns().get(0);\n    rt3.setFontFamily(\"Courier New\");\n    rt3.setFontSize(8d);\n    box3.setText(\"SlideShow ppt = new SlideShow();\\u000b\" + \"Slide slide = ppt.createSlide();\\u000b\" + \"\\u000b\" + \"TextBox box2 = new TextBox();\\u000b\" + \"box2.setHorizontalAlignment(TextBox.AlignCenter);\\u000b\" + \"box2.setVerticalAlignment(TextBox.AnchorMiddle);\\u000b\" + \"box2.getTextRun().setText(\\\"Java Code\\\");\\u000b\" + \"box2.getFill().setForegroundColor(new Color(187, 224, 227));\\u000b\" + \"box2.setLineColor(Color.black);\\u000b\" + \"box2.setLineWidth(0.75);\\u000b\" + \"box2.setAnchor(new Rectangle(66, 243, 170, 170));\\u000b\" + \"slide.addShape(box2);\\u000b\" + \"\\u000b\" + \"TextBox box3 = new TextBox();\\u000b\" + \"box3.setHorizontalAlignment(TextBox.AlignCenter);\\u000b\" + \"box3.setVerticalAlignment(TextBox.AnchorMiddle);\\u000b\" + \"box3.getTextRun().setText(\\\"*.ppt file\\\");\\u000b\" + \"box3.setLineWidth(0.75);\\u000b\" + \"box3.setLineColor(Color.black);\\u000b\" + \"box3.getFill().setForegroundColor(new Color(187, 224, 227));\\u000b\" + \"box3.setAnchor(new Rectangle(473, 243, 170, 170));\\u000b\" + \"slide.addShape(box3);\\u000b\" + \"\\u000b\" + \"AutoShape box4 = new AutoShape(ShapeTypes.Arrow);\\u000b\" + \"box4.getFill().setForegroundColor(new Color(187, 224, 227));\\u000b\" + \"box4.setLineWidth(0.75);\\u000b\" + \"box4.setLineColor(Color.black);\\u000b\" + \"box4.setAnchor(new Rectangle(253, 288, 198, 85));\\u000b\" + \"slide.addShape(box4);\\u000b\" + \"\\u000b\" + \"FileOutputStream out = new FileOutputStream(\\\"hslf-demo.ppt\\\");\\u000b\" + \"ppt.write(out);\\u000b\" + \"out.close();\");\n    box3.setAnchor(new Rectangle(30, 150, 618, 411));\n    box3.setHorizontalCentered(true);\n}",
+    "method_record_id": [
+      3618,
+      3586,
+      3622,
+      3624,
+      892,
+      6344,
+      681,
+      5558,
+      3548,
+      798
+    ]
+  },
+  {
+    "trace_id": 44,
+    "code": "public static void slide7(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setHorizontalCentered(true);\n    box2.setVerticalAlignment(VerticalAlignment.MIDDLE);\n    box2.setText(\"Java Code\");\n    box2.setFillColor(new Color(187, 224, 227));\n    box2.setStrokeStyle(0.75, Color.black);\n    box2.setAnchor(new Rectangle(66, 243, 170, 170));\n    TextBox<?, ?> box3 = slide.createTextBox();\n    box3.setHorizontalCentered(true);\n    box3.setVerticalAlignment(VerticalAlignment.MIDDLE);\n    box3.setText(\"*.ppt file\");\n    box3.setFillColor(new Color(187, 224, 227));\n    box3.setStrokeStyle(0.75, Color.black);\n    box3.setAnchor(new Rectangle(473, 243, 170, 170));\n    AutoShape<?, ?> box4 = slide.createAutoShape();\n    box4.setShapeType(ShapeType.RIGHT_ARROW);\n    box4.setFillColor(new Color(187, 224, 227));\n    box4.setStrokeStyle(0.75, Color.black);\n    box4.setAnchor(new Rectangle(253, 288, 198, 85));\n}",
+    "method_record_id": [
+      3586,
+      3622,
+      3625,
+      5552,
+      3576,
+      3548,
+      3583
+    ]
+  },
+  {
+    "trace_id": 45,
+    "code": "public static void slide8(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"Wait, there is more!\");\n    box1.setAnchor(new Rectangle(36, 21, 648, 90));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.BODY);\n    box2.setText(\"Rich text\\r\" + \"Tables\\r\" + \"Pictures (JPEG, PNG, BMP, WMF, PICT)\\r\" + \"Comprehensive formatting features\");\n    box2.setAnchor(new Rectangle(36, 126, 648, 356));\n}",
+    "method_record_id": [
+      3624,
+      3586,
+      3548,
+      5559
+    ]
+  },
+  {
+    "trace_id": 46,
+    "code": "public static void slide9(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"HSLF in Action - 3\");\n    box1.setAnchor(new Rectangle(36, 20, 648, 50));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.getTextParagraphs().get(0).getTextRuns().get(0).setFontSize(18d);\n    box2.setText(\"PPGraphics2D: PowerPoint Graphics2D driver\");\n    box2.setAnchor(new Rectangle(178, 70, 387, 30));\n    TextBox<?, ?> box3 = slide.createTextBox();\n    TextRun rt3 = box3.getTextParagraphs().get(0).getTextRuns().get(0);\n    rt3.setFontFamily(\"Courier New\");\n    rt3.setFontSize(8d);\n    box3.setText(\"//bar chart data. The first value is the bar color, the second is the width\\u000b\" + \"Object[] def = new Object[]{\\u000b\" + \"    Color.yellow, new Integer(100),\\u000b\" + \"    Color.green, new Integer(150),\\u000b\" + \"    Color.gray, new Integer(75),\\u000b\" + \"    Color.red, new Integer(200),\\u000b\" + \"};\\u000b\" + \"\\u000b\" + \"SlideShow ppt = new SlideShow();\\u000b\" + \"Slide slide = ppt.createSlide();\\u000b\" + \"\\u000b\" + \"ShapeGroup group = new ShapeGroup();\\u000b\" + \"//define position of the drawing in the slide\\u000b\" + \"Rectangle bounds = new java.awt.Rectangle(200, 100, 350, 300);\\u000b\" + \"group.setAnchor(bounds);\\u000b\" + \"slide.addShape(group);\\u000b\" + \"Graphics2D graphics = new PPGraphics2D(group);\\u000b\" + \"\\u000b\" + \"//draw a simple bar graph\\u000b\" + \"int x = bounds.x + 50, y = bounds.y + 50;\\u000b\" + \"graphics.setFont(new Font(\\\"Arial\\\", Font.BOLD, 10));\\u000b\" + \"for (int i = 0, idx = 1; i < def.length; i+=2, idx++) {\\u000b\" + \"    graphics.setColor(Color.black);\\u000b\" + \"    int width = ((Integer)def[i+1]).intValue();\\u000b\" + \"    graphics.drawString(\\\"Q\\\" + idx, x-20, y+20);\\u000b\" + \"    graphics.drawString(width + \\\"%\\\", x + width + 10, y + 20);\\u000b\" + \"    graphics.setColor((Color)def[i]);\\u000b\" + \"    graphics.fill(new Rectangle(x, y, width, 30));\\u000b\" + \"    y += 40;\\u000b\" + \"}\\u000b\" + \"graphics.setColor(Color.black);\\u000b\" + \"graphics.setFont(new Font(\\\"Arial\\\", Font.BOLD, 14));\\u000b\" + \"graphics.draw(bounds);\\u000b\" + \"graphics.drawString(\\\"Performance\\\", x + 70, y + 40);\\u000b\" + \"\\u000b\" + \"FileOutputStream out = new FileOutputStream(\\\"hslf-demo.ppt\\\");\\u000b\" + \"ppt.write(out);\\u000b\" + \"out.close();\");\n    box3.setAnchor(new Rectangle(96, 110, 499, 378));\n    box3.setHorizontalCentered(true);\n}",
+    "method_record_id": [
+      3586,
+      3618,
+      3622,
+      3624,
+      396,
+      5553,
+      3506,
+      3548,
+      382
+    ]
+  },
+  {
+    "trace_id": 47,
+    "code": "public static void slide10(SlideShow<?, ?> ppt) throws IOException {\n    // bar chart data. The first value is the bar color, the second is the width\n    Object[] def = new Object[] { Color.yellow, 100, Color.green, 150, Color.gray, 75, Color.red, 200 };\n    Slide<?, ?> slide = ppt.createSlide();\n    GroupShape<?, ?> group = slide.createGroup();\n    // define position of the drawing in the slide\n    Rectangle bounds = new java.awt.Rectangle(200, 100, 350, 300);\n    group.setAnchor(bounds);\n    Graphics2D graphics = new SLGraphics(group);\n    // draw a simple bar graph\n    int x = bounds.x + 50, y = bounds.y + 50;\n    graphics.setFont(new Font(\"Arial\", Font.BOLD, 10));\n    for (int i = 0, idx = 1; i < def.length; i += 2, idx++) {\n        graphics.setColor(Color.black);\n        int width = ((Integer) def[i + 1]).intValue();\n        graphics.drawString(\"Q\" + idx, x - 20, y + 20);\n        graphics.drawString(width + \"%\", x + width + 10, y + 20);\n        graphics.setColor((Color) def[i]);\n        graphics.fill(new Rectangle(x, y, width, 30));\n        y += 40;\n    }\n    graphics.setColor(Color.black);\n    graphics.setFont(new Font(\"Arial\", Font.BOLD, 14));\n    graphics.draw(bounds);\n    graphics.drawString(\"Performance\", x + 70, y + 40);\n}",
+    "method_record_id": [
+      3586,
+      396,
+      5548,
+      407,
+      3548,
+      380,
+      382
+    ]
+  },
+  {
+    "trace_id": 48,
+    "code": "public static void slide11(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.TITLE);\n    box1.setText(\"HSLF Development Plans\");\n    box1.setAnchor(new Rectangle(36, 21, 648, 90));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.BODY);\n    box2.setText(\"Support for more PowerPoint functionality\\r\" + \"Rendering slides into java.awt.Graphics2D\\r\" + \"A way to export slides into images or other formats\\r\" + \"Integration with Apache FOP - Formatting Objects Processor\\r\" + \"Transformation of XSL-FO into PPT\\r\" + \"PPT2PDF transcoder\");\n    List<? extends TextParagraph<?, ?, ?>> tp = box2.getTextParagraphs();\n    for (int i : new byte[] { 0, 1, 3 }) {\n        tp.get(i).getTextRuns().get(0).setFontSize(28d);\n    }\n    for (int i : new byte[] { 2, 4, 5 }) {\n        tp.get(i).getTextRuns().get(0).setFontSize(24d);\n        tp.get(i).setIndentLevel(1);\n    }\n    box2.setAnchor(new Rectangle(36, 126, 648, 400));\n}",
+    "method_record_id": [
+      3618,
+      3586,
+      3624,
+      5555,
+      3548
+    ]
+  },
+  {
+    "trace_id": 49,
+    "code": "public static void slide12(SlideShow<?, ?> ppt) throws IOException {\n    Slide<?, ?> slide = ppt.createSlide();\n    TextBox<?, ?> box1 = slide.createTextBox();\n    box1.setTextPlaceholder(TextPlaceholder.CENTER_TITLE);\n    box1.setText(\"Questions?\");\n    box1.setAnchor(new Rectangle(54, 167, 612, 115));\n    TextBox<?, ?> box2 = slide.createTextBox();\n    box2.setTextPlaceholder(TextPlaceholder.CENTER_BODY);\n    box2.setText(\"http://poi.apache.org/hslf/\\r\" + \"http://people.apache.org/~yegor\");\n    box2.setAnchor(new Rectangle(108, 306, 504, 138));\n}",
+    "method_record_id": [
+      3624,
+      3586,
+      3548,
+      5549
+    ]
+  },
+  {
+    "trace_id": 50,
+    "code": "public static void main(String[] args) throws IOException {\n    HSLFSlideShow ppt = new HSLFSlideShow();\n    try {\n        HSLFSlide slide = ppt.createSlide();\n        HSLFTextBox shape = new HSLFTextBox();\n        HSLFTextParagraph rt = shape.getTextParagraphs().get(0);\n        rt.getTextRuns().get(0).setFontSize(42d);\n        rt.setBullet(true);\n        // bullet offset\n        rt.setIndent(0d);\n        // text offset (should be greater than bullet offset)\n        rt.setLeftMargin(50d);\n        // bullet character\n        rt.setBulletChar('\\u263A');\n        shape.setText(\"January\\r\" + \"February\\r\" + \"March\\r\" + \"April\");\n        slide.addShape(shape);\n        // position of the text box in the slide\n        shape.setAnchor(new java.awt.Rectangle(50, 50, 500, 300));\n        slide.addShape(shape);\n        FileOutputStream out = new FileOutputStream(\"bullets.ppt\");\n        ppt.write(out);\n        out.close();\n    } finally {\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      3586,
+      3618,
+      3560,
+      9,
+      4951,
+      3548
+    ]
+  },
+  {
+    "trace_id": 51,
+    "code": "public static void main(String[] args) throws IOException {\n    HSLFSlideShow ppt = new HSLFSlideShow();\n    try {\n        HSLFSlide slideA = ppt.createSlide();\n        ppt.createSlide();\n        HSLFSlide slideC = ppt.createSlide();\n        // link to a URL\n        HSLFTextBox textBox1 = slideA.createTextBox();\n        textBox1.setText(\"Apache POI\");\n        textBox1.setAnchor(new Rectangle(100, 100, 200, 50));\n        HSLFHyperlink link1 = textBox1.getTextParagraphs().get(0).getTextRuns().get(0).createHyperlink();\n        link1.linkToUrl(\"http://www.apache.org\");\n        link1.setLabel(textBox1.getText());\n        // link to another slide\n        HSLFTextBox textBox2 = slideA.createTextBox();\n        textBox2.setText(\"Go to slide #3\");\n        textBox2.setAnchor(new Rectangle(100, 300, 200, 50));\n        HSLFHyperlink link2 = textBox2.getTextParagraphs().get(0).getTextRuns().get(0).createHyperlink();\n        link2.linkToSlide(slideC);\n        FileOutputStream out = new FileOutputStream(\"hyperlink.ppt\");\n        ppt.write(out);\n        out.close();\n    } finally {\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      3618,
+      3586,
+      5031,
+      9,
+      3640,
+      3643,
+      3548
+    ]
+  },
+  {
+    "trace_id": 52,
+    "code": "public static void main(String[] args) throws Exception {\n    if (args.length == 0) {\n        usage();\n        return;\n    }\n    FileInputStream is = new FileInputStream(args[0]);\n    HSLFSlideShow ppt = new HSLFSlideShow(is);\n    is.close();\n    // extract all sound files embedded in this presentation\n    HSLFSoundData[] sound = ppt.getSoundData();\n    for (int i = 0; i < sound.length; i++) {\n        // *.wav\n        String type = sound[i].getSoundType();\n        // typically file name\n        String name = sound[i].getSoundName();\n        // raw bytes\n        byte[] data = sound[i].getData();\n        // save the sound  on disk\n        FileOutputStream out = new FileOutputStream(name + type);\n        out.write(data);\n        out.close();\n    }\n    int oleIdx = -1, picIdx = -1;\n    for (HSLFSlide slide : ppt.getSlides()) {\n        // extract embedded OLE documents\n        for (HSLFShape shape : slide.getShapes()) {\n            if (shape instanceof OLEShape) {\n                oleIdx++;\n                OLEShape ole = (OLEShape) shape;\n                HSLFObjectData data = ole.getObjectData();\n                String name = ole.getInstanceName();\n                if (\"Worksheet\".equals(name)) {\n                    // read xls\n                    @SuppressWarnings({ \"unused\", \"resource\" })\n                    HSSFWorkbook wb = new HSSFWorkbook(data.getData());\n                } else if (\"Document\".equals(name)) {\n                    HWPFDocument doc = new HWPFDocument(data.getData());\n                    // read the word document\n                    Range r = doc.getRange();\n                    for (int k = 0; k < r.numParagraphs(); k++) {\n                        Paragraph p = r.getParagraph(k);\n                        System.out.println(p.text());\n                    }\n                    // save on disk\n                    FileOutputStream out = new FileOutputStream(name + \"-(\" + (oleIdx) + \").doc\");\n                    doc.write(out);\n                    out.close();\n                    doc.close();\n                } else {\n                    FileOutputStream out = new FileOutputStream(ole.getProgID() + \"-\" + (oleIdx + 1) + \".dat\");\n                    InputStream dis = data.getData();\n                    byte[] chunk = new byte[2048];\n                    int count;\n                    while ((count = dis.read(chunk)) >= 0) {\n                        out.write(chunk, 0, count);\n                    }\n                    is.close();\n                    out.close();\n                }\n            } else // Pictures\n            if (shape instanceof HSLFPictureShape) {\n                picIdx++;\n                HSLFPictureShape p = (HSLFPictureShape) shape;\n                HSLFPictureData data = p.getPictureData();\n                String ext = data.getType().extension;\n                FileOutputStream out = new FileOutputStream(\"pict-\" + picIdx + ext);\n                out.write(data.getData());\n                out.close();\n            }\n        }\n    }\n    ppt.close();\n}",
+    "method_record_id": [
+      360,
+      9,
+      7850,
+      4554,
+      365
+    ]
+  },
+  {
+    "trace_id": 53,
+    "code": "private static void usage() {\n    System.out.println(\"Usage: DataExtraction  ppt\");\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 54,
+    "code": "/**\n * A simple bar chart demo\n */\npublic static void main(String[] args) throws Exception {\n    HSLFSlideShow ppt = new HSLFSlideShow();\n    try {\n        // bar chart data. The first value is the bar color, the second is the width\n        Object[] def = new Object[] { Color.yellow, 40, Color.green, 60, Color.gray, 30, Color.red, 80 };\n        HSLFSlide slide = ppt.createSlide();\n        HSLFGroupShape group = new HSLFGroupShape();\n        // define position of the drawing in the slide\n        Rectangle bounds = new java.awt.Rectangle(200, 100, 350, 300);\n        group.setAnchor(bounds);\n        group.setInteriorAnchor(new java.awt.Rectangle(0, 0, 100, 100));\n        slide.addShape(group);\n        Graphics2D graphics = new PPGraphics2D(group);\n        // draw a simple bar graph\n        int x = 10, y = 10;\n        graphics.setFont(new Font(\"Arial\", Font.BOLD, 10));\n        for (int i = 0, idx = 1; i < def.length; i += 2, idx++) {\n            graphics.setColor(Color.black);\n            int width = ((Integer) def[i + 1]).intValue();\n            graphics.drawString(\"Q\" + idx, x - 5, y + 10);\n            graphics.drawString(width + \"%\", x + width + 3, y + 10);\n            graphics.setColor((Color) def[i]);\n            graphics.fill(new Rectangle(x, y, width, 10));\n            y += 15;\n        }\n        graphics.setColor(Color.black);\n        graphics.setFont(new Font(\"Arial\", Font.BOLD, 14));\n        graphics.draw(group.getInteriorAnchor());\n        graphics.drawString(\"Performance\", x + 30, y + 10);\n        FileOutputStream out = new FileOutputStream(\"hslf-graphics.ppt\");\n        ppt.write(out);\n        out.close();\n    } finally {\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      3586,
+      9,
+      396,
+      3535,
+      3536,
+      407,
+      380,
+      3548,
+      382
+    ]
+  },
+  {
+    "trace_id": 55,
+    "code": "public static void main(String[] args) throws IOException {\n    HSLFSlideShow ppt = new HSLFSlideShow();\n    try {\n        HeadersFooters slideHeaders = ppt.getSlideHeadersFooters();\n        slideHeaders.setFootersText(\"Created by POI-HSLF\");\n        slideHeaders.setSlideNumberVisible(true);\n        slideHeaders.setDateTimeText(\"custom date time\");\n        HeadersFooters notesHeaders = ppt.getNotesHeadersFooters();\n        notesHeaders.setFootersText(\"My notes footers\");\n        notesHeaders.setHeaderText(\"My notes header\");\n        ppt.createSlide();\n        FileOutputStream out = new FileOutputStream(\"headers_footers.ppt\");\n        ppt.write(out);\n        out.close();\n    } finally {\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      3586,
+      9,
+      336,
+      337,
+      338,
+      339
+    ]
+  },
+  {
+    "trace_id": 56,
+    "code": "public static void main(String[] args) throws Exception {\n    for (int i = 0; i < args.length; i++) {\n        FileInputStream is = new FileInputStream(args[i]);\n        HSLFSlideShow ppt = new HSLFSlideShow(is);\n        is.close();\n        for (HSLFSlide slide : ppt.getSlides()) {\n            System.out.println(\"\\nslide \" + slide.getSlideNumber());\n            // read hyperlinks from the slide's text runs\n            System.out.println(\"- reading hyperlinks from the text runs\");\n            for (List<HSLFTextParagraph> paras : slide.getTextParagraphs()) {\n                for (HSLFTextParagraph para : paras) {\n                    for (HSLFTextRun run : para) {\n                        HSLFHyperlink link = run.getHyperlink();\n                        if (link != null) {\n                            System.out.println(toStr(link, run.getRawText()));\n                        }\n                    }\n                }\n            }\n            // in PowerPoint you can assign a hyperlink to a shape without text,\n            // for example to a Line object. The code below demonstrates how to\n            // read such hyperlinks\n            System.out.println(\"- reading hyperlinks from the slide's shapes\");\n            for (HSLFShape sh : slide.getShapes()) {\n                if (sh instanceof HSLFSimpleShape) {\n                    HSLFHyperlink link = ((HSLFSimpleShape) sh).getHyperlink();\n                    if (link != null) {\n                        System.out.println(toStr(link, null));\n                    }\n                }\n            }\n        }\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      3618,
+      3675
+    ]
+  },
+  {
+    "trace_id": 57,
+    "code": "static String toStr(HSLFHyperlink link, String rawText) {\n    // in ppt end index is inclusive\n    String formatStr = \"title: %1$s, address: %2$s\" + (rawText == null ? \"\" : \", start: %3$s, end: %4$s, substring: %5$s\");\n    return String.format(Locale.ROOT, formatStr, link.getLabel(), link.getAddress(), link.getStartIndex(), link.getEndIndex(), rawText);\n}",
+    "method_record_id": [
+      5029
+    ]
+  },
+  {
+    "trace_id": 58,
+    "code": "public static void main(String[] args) throws IOException {\n    if (args.length == 0) {\n        usage();\n        return;\n    }\n    int slidenum = -1;\n    float scale = 1;\n    String file = null;\n    for (int i = 0; i < args.length; i++) {\n        if (args[i].startsWith(\"-\")) {\n            if (\"-scale\".equals(args[i])) {\n                scale = Float.parseFloat(args[++i]);\n            } else if (\"-slide\".equals(args[i])) {\n                slidenum = Integer.parseInt(args[++i]);\n            }\n        } else {\n            file = args[i];\n        }\n    }\n    if (file == null) {\n        usage();\n        return;\n    }\n    FileInputStream is = new FileInputStream(file);\n    HSLFSlideShow ppt = new HSLFSlideShow(is);\n    is.close();\n    Dimension pgsize = ppt.getPageSize();\n    int width = (int) (pgsize.width * scale);\n    int height = (int) (pgsize.height * scale);\n    for (HSLFSlide slide : ppt.getSlides()) {\n        if (slidenum != -1 && slidenum != slide.getSlideNumber()) {\n            continue;\n        }\n        String title = slide.getTitle();\n        System.out.println(\"Rendering slide \" + slide.getSlideNumber() + (title == null ? \"\" : \": \" + title));\n        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);\n        Graphics2D graphics = img.createGraphics();\n        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);\n        graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);\n        graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);\n        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);\n        graphics.setPaint(Color.white);\n        graphics.fill(new Rectangle2D.Float(0, 0, width, height));\n        graphics.scale((double) width / pgsize.width, (double) height / pgsize.height);\n        slide.draw(graphics);\n        String fname = file.replaceAll(\"\\\\.ppt\", \"-\" + slide.getSlideNumber() + \".png\");\n        FileOutputStream out = new FileOutputStream(fname);\n        ImageIO.write(img, \"png\", out);\n        out.close();\n    }\n    ppt.close();\n}",
+    "method_record_id": [
+      394,
+      3506,
+      434,
+      435,
+      382
+    ]
+  },
+  {
+    "trace_id": 59,
+    "code": "private static void usage() {\n    System.out.println(\"Usage: PPT2PNG [-scale <scale> -slide <num>] ppt\");\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 60,
+    "code": "public static void main(String[] args) throws IOException {\n    FileInputStream fis = new FileInputStream(args[0]);\n    HSLFSlideShow ppt = new HSLFSlideShow(fis);\n    HSLFSoundData[] sounds = ppt.getSoundData();\n    for (HSLFSlide slide : ppt.getSlides()) {\n        for (HSLFShape shape : slide.getShapes()) {\n            int soundRef = getSoundReference(shape);\n            if (soundRef == -1)\n                continue;\n            System.out.println(\"Slide[\" + slide.getSlideNumber() + \"], shape[\" + shape.getShapeId() + \"], soundRef: \" + soundRef);\n            System.out.println(\"  \" + sounds[soundRef].getSoundName());\n            System.out.println(\"  \" + sounds[soundRef].getSoundType());\n        }\n    }\n    ppt.close();\n    fis.close();\n}",
+    "method_record_id": [
+      5563
+    ]
+  },
+  {
+    "trace_id": 61,
+    "code": "/**\n * Check if a given shape is associated with a sound.\n * @return 0-based reference to a sound in the sound collection\n * or -1 if the shape is not associated with a sound\n */\nprotected static int getSoundReference(HSLFShape shape) {\n    int soundRef = -1;\n    // dive into the shape container and search for InteractiveInfoAtom\n    InteractiveInfoAtom info = shape.getClientDataRecord(RecordTypes.InteractiveInfo.typeID);\n    if (info != null && info.getAction() == InteractiveInfoAtom.ACTION_MEDIA) {\n        soundRef = info.getSoundRef();\n    }\n    return soundRef;\n}",
+    "method_record_id": [
+      6752,
+      5563
+    ]
+  },
+  {
+    "trace_id": 62,
+    "code": "public static void main(String[] args) throws Exception {\n    HSLFSlideShow ppt = new HSLFSlideShow();\n    try {\n        HSLFSlide slide = ppt.createSlide();\n        create1stTable(slide);\n        create2ndTable(slide);\n        FileOutputStream out = new FileOutputStream(\"hslf-table.ppt\");\n        ppt.write(out);\n        out.close();\n    } finally {\n        ppt.close();\n    }\n}",
+    "method_record_id": [
+      9,
+      3586
+    ]
+  },
+  {
+    "trace_id": 63,
+    "code": "static void create1stTable(HSLFSlide slide) {\n    // six rows, two columns\n    HSLFTable table1 = slide.createTable(6, 2);\n    for (int i = 0; i < txt1.length; i++) {\n        for (int j = 0; j < txt1[i].length; j++) {\n            HSLFTableCell cell = table1.getCell(i, j);\n            HSLFTextRun rt = cell.getTextParagraphs().get(0).getTextRuns().get(0);\n            rt.setFontFamily(\"Arial\");\n            rt.setFontSize(10d);\n            if (i == 0) {\n                cell.getFill().setForegroundColor(new Color(227, 227, 227));\n            } else {\n                rt.setBold(true);\n            }\n            cell.setVerticalAlignment(VerticalAlignment.MIDDLE);\n            cell.setHorizontalCentered(true);\n            cell.setText(txt1[i][j]);\n        }\n    }\n    DrawTableShape dts1 = new DrawTableShape(table1);\n    dts1.setAllBorders(1.0, Color.black);\n    table1.setColumnWidth(0, 300);\n    table1.setColumnWidth(1, 150);\n    int pgWidth = slide.getSlideShow().getPageSize().width;\n    table1.moveTo((pgWidth - table1.getAnchor().getWidth()) / 2., 100.);\n}",
+    "method_record_id": [
+      3649,
+      3618,
+      3622,
+      6344,
+      681,
+      3563
+    ]
+  },
+  {
+    "trace_id": 64,
+    "code": "static void create2ndTable(HSLFSlide slide) {\n    // two rows, one column\n    HSLFTable table2 = slide.createTable(2, 1);\n    for (int i = 0; i < txt2.length; i++) {\n        for (int j = 0; j < txt2[i].length; j++) {\n            HSLFTableCell cell = table2.getCell(i, j);\n            HSLFTextRun rt = cell.getTextParagraphs().get(0).getTextRuns().get(0);\n            rt.setFontSize(10d);\n            rt.setFontFamily(\"Arial\");\n            if (i == 0) {\n                cell.getFill().setForegroundColor(new Color(0, 51, 102));\n                rt.setFontColor(Color.white);\n                rt.setBold(true);\n                rt.setFontSize(14d);\n                cell.setHorizontalCentered(true);\n            } else {\n                rt.getTextParagraph().setBullet(true);\n                rt.setFontSize(12d);\n                rt.getTextParagraph().setTextAlign(TextAlign.LEFT);\n                cell.setHorizontalCentered(false);\n            }\n            cell.setVerticalAlignment(VerticalAlignment.MIDDLE);\n            cell.setText(txt2[i][j]);\n        }\n    }\n    table2.setColumnWidth(0, 300);\n    table2.setRowHeight(0, 30);\n    table2.setRowHeight(1, 70);\n    DrawTableShape dts2 = new DrawTableShape(table2);\n    dts2.setOutsideBorders(Color.black, 1.0);\n    table2.moveTo(200, 400);\n}",
+    "method_record_id": [
+      3618,
+      3622,
+      6344,
+      681,
+      3563,
+      3666
+    ]
+  },
+  {
+    "trace_id": 65,
+    "code": "/**\n *  Processes the message.\n *\n *  @throws IOException if an exception occurs while writing the message out\n */\npublic void processMessage() throws IOException {\n    String txtFileName = fileNameStem + \".txt\";\n    String attDirName = fileNameStem + \"-att\";\n    PrintWriter txtOut = null;\n    try {\n        txtOut = new PrintWriter(txtFileName);\n        try {\n            String displayFrom = msg.getDisplayFrom();\n            txtOut.println(\"From: \" + displayFrom);\n        } catch (ChunkNotFoundException e) {\n        // ignore\n        }\n        try {\n            String displayTo = msg.getDisplayTo();\n            txtOut.println(\"To: \" + displayTo);\n        } catch (ChunkNotFoundException e) {\n        // ignore\n        }\n        try {\n            String displayCC = msg.getDisplayCC();\n            txtOut.println(\"CC: \" + displayCC);\n        } catch (ChunkNotFoundException e) {\n        // ignore\n        }\n        try {\n            String displayBCC = msg.getDisplayBCC();\n            txtOut.println(\"BCC: \" + displayBCC);\n        } catch (ChunkNotFoundException e) {\n        // ignore\n        }\n        try {\n            String subject = msg.getSubject();\n            txtOut.println(\"Subject: \" + subject);\n        } catch (ChunkNotFoundException e) {\n        // ignore\n        }\n        try {\n            String body = msg.getTextBody();\n            txtOut.println(body);\n        } catch (ChunkNotFoundException e) {\n            System.err.println(\"No message body\");\n        }\n        AttachmentChunks[] attachments = msg.getAttachmentFiles();\n        if (attachments.length > 0) {\n            File d = new File(attDirName);\n            if (d.mkdir()) {\n                for (AttachmentChunks attachment : attachments) {\n                    processAttachment(attachment, d);\n                }\n            } else {\n                System.err.println(\"Can't create directory \" + attDirName);\n            }\n        }\n    } finally {\n        if (txtOut != null) {\n            txtOut.close();\n        }\n    }\n}",
+    "method_record_id": [
+      5664,
+      5672,
+      460,
+      461,
+      5648,
+      5649,
+      5650,
+      5663
+    ]
+  },
+  {
+    "trace_id": 66,
+    "code": "/**\n *  Processes a single attachment: reads it from the Outlook MSG file and\n *  writes it to disk as an individual file.\n *\n *  @param attachment the chunk group describing the attachment\n *  @param dir the directory in which to write the attachment file\n *  @throws IOException when any of the file operations fails\n */\npublic void processAttachment(AttachmentChunks attachment, File dir) throws IOException {\n    String fileName = attachment.getAttachFileName().toString();\n    if (attachment.getAttachLongFileName() != null) {\n        fileName = attachment.getAttachLongFileName().toString();\n    }\n    File f = new File(dir, fileName);\n    OutputStream fileOut = null;\n    try {\n        fileOut = new FileOutputStream(f);\n        fileOut.write(attachment.getAttachData().getValue());\n    } finally {\n        if (fileOut != null) {\n            fileOut.close();\n        }\n    }\n}",
+    "method_record_id": [
+      9,
+      461
+    ]
+  },
+  {
+    "trace_id": 67,
+    "code": "/**\n *  Processes the list of arguments as a list of names of Outlook MSG files.\n *\n *  @param args the list of MSG files to process\n */\npublic static void main(String[] args) {\n    if (args.length <= 0) {\n        System.err.println(\"No files names provided\");\n    } else {\n        for (int i = 0; i < args.length; i++) {\n            try {\n                Msg2txt processor = new Msg2txt(args[i]);\n                processor.processMessage();\n            } catch (IOException e) {\n                System.err.println(\"Could not process \" + args[i] + \": \" + e);\n            }\n        }\n    }\n}",
+    "method_record_id": [
+      460
+    ]
+  },
+  {
+    "trace_id": 68,
+    "code": "/**\n *  Initiates the processing of the XLS file to CSV\n */\npublic void process() throws IOException {\n    MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);\n    formatListener = new FormatTrackingHSSFListener(listener);\n    HSSFEventFactory factory = new HSSFEventFactory();\n    HSSFRequest request = new HSSFRequest();\n    if (outputFormulaValues) {\n        request.addListenerForAllRecords(formatListener);\n    } else {\n        workbookBuildingListener = new SheetRecordCollectingListener(formatListener);\n        request.addListenerForAllRecords(workbookBuildingListener);\n    }\n    factory.processWorkbookEvents(request, fs);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 69,
+    "code": "/**\n *  Main HSSFListener method, processes events, and outputs the\n *   CSV as the file is processed.\n */\n@Override\npublic void processRecord(Record record) {\n    int thisRow = -1;\n    int thisColumn = -1;\n    String thisStr = null;\n    switch(record.getSid()) {\n        case BoundSheetRecord.sid:\n            boundSheetRecords.add((BoundSheetRecord) record);\n            break;\n        case BOFRecord.sid:\n            BOFRecord br = (BOFRecord) record;\n            if (br.getType() == BOFRecord.TYPE_WORKSHEET) {\n                // Create sub workbook if required\n                if (workbookBuildingListener != null && stubWorkbook == null) {\n                    stubWorkbook = workbookBuildingListener.getStubHSSFWorkbook();\n                }\n                // Output the worksheet name\n                // Works by ordering the BSRs by the location of\n                // their BOFRecords, and then knowing that we\n                // process BOFRecords in byte offset order\n                sheetIndex++;\n                if (orderedBSRs == null) {\n                    orderedBSRs = BoundSheetRecord.orderByBofPosition(boundSheetRecords);\n                }\n                output.println();\n                output.println(orderedBSRs[sheetIndex].getSheetname() + \" [\" + (sheetIndex + 1) + \"]:\");\n            }\n            break;\n        case SSTRecord.sid:\n            sstRecord = (SSTRecord) record;\n            break;\n        case BlankRecord.sid:\n            BlankRecord brec = (BlankRecord) record;\n            thisRow = brec.getRow();\n            thisColumn = brec.getColumn();\n            thisStr = \"\";\n            break;\n        case BoolErrRecord.sid:\n            BoolErrRecord berec = (BoolErrRecord) record;\n            thisRow = berec.getRow();\n            thisColumn = berec.getColumn();\n            thisStr = \"\";\n            break;\n        case FormulaRecord.sid:\n            FormulaRecord frec = (FormulaRecord) record;\n            thisRow = frec.getRow();\n            thisColumn = frec.getColumn();\n            if (outputFormulaValues) {\n                if (Double.isNaN(frec.getValue())) {\n                    // Formula result is a string\n                    // This is stored in the next record\n                    outputNextStringRecord = true;\n                    nextRow = frec.getRow();\n                    nextColumn = frec.getColumn();\n                } else {\n                    thisStr = formatListener.formatNumberDateCell(frec);\n                }\n            } else {\n                thisStr = '\"' + HSSFFormulaParser.toFormulaString(stubWorkbook, frec.getParsedExpression()) + '\"';\n            }\n            break;\n        case StringRecord.sid:\n            if (outputNextStringRecord) {\n                // String for formula\n                StringRecord srec = (StringRecord) record;\n                thisStr = srec.getString();\n                thisRow = nextRow;\n                thisColumn = nextColumn;\n                outputNextStringRecord = false;\n            }\n            break;\n        case LabelRecord.sid:\n            LabelRecord lrec = (LabelRecord) record;\n            thisRow = lrec.getRow();\n            thisColumn = lrec.getColumn();\n            thisStr = '\"' + lrec.getValue() + '\"';\n            break;\n        case LabelSSTRecord.sid:\n            LabelSSTRecord lsrec = (LabelSSTRecord) record;\n            thisRow = lsrec.getRow();\n            thisColumn = lsrec.getColumn();\n            if (sstRecord == null) {\n                thisStr = '\"' + \"(No SST Record, can't identify string)\" + '\"';\n            } else {\n                thisStr = '\"' + sstRecord.getString(lsrec.getSSTIndex()).toString() + '\"';\n            }\n            break;\n        case NoteRecord.sid:\n            NoteRecord nrec = (NoteRecord) record;\n            thisRow = nrec.getRow();\n            thisColumn = nrec.getColumn();\n            // TODO: Find object to match nrec.getShapeId()\n            thisStr = '\"' + \"(TODO)\" + '\"';\n            break;\n        case NumberRecord.sid:\n            NumberRecord numrec = (NumberRecord) record;\n            thisRow = numrec.getRow();\n            thisColumn = numrec.getColumn();\n            // Format\n            thisStr = formatListener.formatNumberDateCell(numrec);\n            break;\n        case RKRecord.sid:\n            RKRecord rkrec = (RKRecord) record;\n            thisRow = rkrec.getRow();\n            thisColumn = rkrec.getColumn();\n            thisStr = '\"' + \"(TODO)\" + '\"';\n            break;\n        default:\n            break;\n    }\n    // Handle new row\n    if (thisRow != -1 && thisRow != lastRowNumber) {\n        lastColumnNumber = -1;\n    }\n    // Handle missing column\n    if (record instanceof MissingCellDummyRecord) {\n        MissingCellDummyRecord mc = (MissingCellDummyRecord) record;\n        thisRow = mc.getRow();\n        thisColumn = mc.getColumn();\n        thisStr = \"\";\n    }\n    // If we got something to print out, do so\n    if (thisStr != null) {\n        if (thisColumn > 0) {\n            output.print(',');\n        }\n        output.print(thisStr);\n    }\n    // Update column and row count\n    if (thisRow > -1)\n        lastRowNumber = thisRow;\n    if (thisColumn > -1)\n        lastColumnNumber = thisColumn;\n    // Handle end of row\n    if (record instanceof LastCellOfRowDummyRecord) {\n        // Print out any missing commas if needed\n        if (minColumns > 0) {\n            // Columns are 0 based\n            if (lastColumnNumber == -1) {\n                lastColumnNumber = 0;\n            }\n            for (int i = lastColumnNumber; i < (minColumns); i++) {\n                output.print(',');\n            }\n        }\n        // We're onto a new row\n        lastColumnNumber = -1;\n        // End the row\n        output.println();\n    }\n}",
+    "method_record_id": [
+      563,
+      5941
+    ]
+  },
+  {
+    "trace_id": 70,
+    "code": "public static void main(String[] args) throws Exception {\n    if (args.length < 1) {\n        System.err.println(\"Use:\");\n        System.err.println(\"  XLS2CSVmra <xls file> [min columns]\");\n        System.exit(1);\n    }\n    int minColumns = -1;\n    if (args.length >= 2) {\n        minColumns = Integer.parseInt(args[1]);\n    }\n    XLS2CSVmra xls2csv = new XLS2CSVmra(args[0], minColumns);\n    xls2csv.process();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 71,
+    "code": "/**\n * Add an image to a worksheet.\n *\n * @param cellNumber A String that contains the location of the cell whose\n *                   top left hand corner should be aligned with the top\n *                   left hand corner of the image; for example \"A1\", \"A2\"\n *                   etc. This is to support the familiar Excel syntax.\n *                   Whilst images are are not actually inserted into cells\n *                   this provides a convenient method of indicating where\n *                   the image should be positioned on the sheet.\n * @param sheet A reference to the sheet that contains the cell referenced\n *              above.\n * @param imageFile A String that encapsulates the name of and path to\n *                  the image that is to be 'inserted into' the sheet.\n * @param reqImageWidthMM A primitive double that contains the required\n *                        width of the image in millimetres.\n * @param reqImageHeightMM A primitive double that contains the required\n *                         height of the image in millimetres.\n * @param resizeBehaviour A primitive int whose value will determine how\n *                        the code should react if the image is larger than\n *                        the cell referenced by the cellNumber parameter.\n *                        Four constants are provided to determine what\n *                        should happen;\n *                          AddDimensionedImage.EXPAND_ROW\n *                          AddDimensionedImage.EXPAND_COLUMN\n *                          AddDimensionedImage.EXPAND_ROW_AND_COLUMN\n *                          AddDimensionedImage.OVERLAY_ROW_AND_COLUMN\n * @throws java.io.FileNotFoundException If the file containing the image\n *                                       cannot be located.\n * @throws java.io.IOException If a problem occurs whilst reading the file\n *                             of image data.\n * @throws java.lang.IllegalArgumentException If an invalid value is passed\n *                                            to the resizeBehaviour\n *                                            parameter.\n */\npublic void addImageToSheet(String cellNumber, HSSFSheet sheet, String imageFile, double reqImageWidthMM, double reqImageHeightMM, int resizeBehaviour) throws IOException, IllegalArgumentException {\n    // Convert the String into column and row indices then chain the\n    // call to the overridden addImageToSheet() method.\n    CellReference cellRef = new CellReference(cellNumber);\n    this.addImageToSheet(cellRef.getCol(), cellRef.getRow(), sheet, imageFile, reqImageWidthMM, reqImageHeightMM, resizeBehaviour);\n}",
+    "method_record_id": [
+      7161,
+      3687
+    ]
+  },
+  {
+    "trace_id": 72,
+    "code": "/**\n * Add an image to a worksheet.\n *\n * @param colNumber A primitive int that contains the index number of a\n *                  column on the worksheet; POI column indices are zero\n *                  based. Together with the rowNumber parameter's value,\n *                  this parameter identifies a cell on the worksheet. The\n *                  image's top left hand corner will be aligned with the\n *                  top left hand corner of this cell.\n * @param rowNumber A primtive int that contains the index number of a row\n *                  on the worksheet; POI row indices are zero based.\n *                  Together with the rowNumber parameter's value, this\n *                  parameter identifies a cell on the worksheet. The\n *                  image's top left hand corner will be aligned with the\n *                  top left hand corner of this cell.\n * @param sheet A reference to the sheet that contains the cell identified\n *              by the two parameters above.\n * @param imageFile A String that encapsulates the name of and path to\n *                  the image that is to be 'inserted into' the sheet.\n * @param reqImageWidthMM A primitive double that contains the required\n *                        width of the image in millimetres.\n * @param reqImageHeightMM A primitive double that contains the required\n *                         height of the image in millimetres.\n * @param resizeBehaviour A primitive int whose value will determine how\n *                        the code should react if the image is larger than\n *                        the cell referenced by the colNumber and\n *                        rowNumber parameters. Four constants are provided\n *                        to determine what should happen;\n *                          AddDimensionedImage.EXPAND_ROW\n *                          AddDimensionedImage.EXPAND_COLUMN\n *                          AddDimensionedImage.EXPAND_ROW_AND_COLUMN\n *                          AddDimensionedImage.OVERLAY_ROW_AND_COLUMN\n * @throws java.io.FileNotFoundException If the file containing the image\n *                                       cannot be located.\n * @throws java.io.IOException If a problem occurs whilst reading the file\n *                             of image data.\n * @throws java.lang.IllegalArgumentException If an invalid value is passed\n *                                            to the resizeBehaviour\n *                                            parameter.\n */\nprivate void addImageToSheet(int colNumber, int rowNumber, HSSFSheet sheet, String imageFile, double reqImageWidthMM, double reqImageHeightMM, int resizeBehaviour) throws FileNotFoundException, IOException, IllegalArgumentException {\n    HSSFClientAnchor anchor = null;\n    HSSFPatriarch patriarch = null;\n    ClientAnchorDetail rowClientAnchorDetail = null;\n    ClientAnchorDetail colClientAnchorDetail = null;\n    // Validate the resizeBehaviour parameter.\n    if ((resizeBehaviour != AddDimensionedImage.EXPAND_COLUMN) && (resizeBehaviour != AddDimensionedImage.EXPAND_ROW) && (resizeBehaviour != AddDimensionedImage.EXPAND_ROW_AND_COLUMN) && (resizeBehaviour != AddDimensionedImage.OVERLAY_ROW_AND_COLUMN)) {\n        throw new IllegalArgumentException(\"Invalid value passed to the \" + \"resizeBehaviour parameter of AddDimensionedImage.addImageToSheet()\");\n    }\n    // Call methods to calculate how the image and sheet should be\n    // manipulated to accomodate the image; columns and then rows.\n    colClientAnchorDetail = this.fitImageToColumns(sheet, colNumber, reqImageWidthMM, resizeBehaviour);\n    rowClientAnchorDetail = this.fitImageToRows(sheet, rowNumber, reqImageHeightMM, resizeBehaviour);\n    // Having determined if and how to resize the rows, columns and/or the\n    // image, create the HSSFClientAnchor object to position the image on\n    // the worksheet. Note how the two ClientAnchorDetail records are\n    // interrogated to recover the row/column co-ordinates and any insets.\n    // The first two parameters are not used currently but could be if the\n    // need arose to extend the functionality of this code by adding the\n    // ability to specify that a clear 'border' be placed around the image.\n    anchor = new HSSFClientAnchor(0, 0, colClientAnchorDetail.getInset(), rowClientAnchorDetail.getInset(), (short) colClientAnchorDetail.getFromIndex(), rowClientAnchorDetail.getFromIndex(), (short) colClientAnchorDetail.getToIndex(), rowClientAnchorDetail.getToIndex());\n    // For now, set the anchor type to do not move or resize the\n    // image as the size of the row/column is adjusted. This could easilly\n    // become another parameter passed to the method.\n    // anchor.setAnchorType(HSSFClientAnchor.DONT_MOVE_AND_RESIZE);\n    anchor.setAnchorType(AnchorType.MOVE_AND_RESIZE);\n    // Now, add the picture to the workbook. Note that the type is assumed\n    // to be a JPEG/JPG, this could easily (and should) be parameterised\n    // however.\n    // int index = sheet.getWorkbook().addPicture(this.imageToBytes(imageFile),\n    // HSSFWorkbook.PICTURE_TYPE_JPEG);\n    int index = sheet.getWorkbook().addPicture(this.imageToBytes(imageFile), HSSFWorkbook.PICTURE_TYPE_PNG);\n    // Get the drawing patriarch and create the picture.\n    patriarch = sheet.createDrawingPatriarch();\n    patriarch.createPicture(anchor, index);\n}",
+    "method_record_id": [
+      3585,
+      4025,
+      4317
+    ]
+  },
+  {
+    "trace_id": 73,
+    "code": "/**\n * Determines whether the sheets columns should be re-sized to accomodate\n * the image, adjusts the columns width if necessary and creates then\n * returns a ClientAnchorDetail object that facilitates construction of\n * an HSSFClientAnchor that will fix the image on the sheet and establish\n * it's size.\n *\n * @param sheet A reference to the sheet that will 'contain' the image.\n * @param colNumber A primtive int that contains the index number of a\n *                  column on the sheet.\n * @param reqImageWidthMM A primtive double that contains the required\n *                        width of the image in millimetres\n * @param resizeBehaviour A primitve int whose value will indicate how the\n *                        width of the column should be adjusted if the\n *                        required width of the image is greater than the\n *                        width of the column.\n * @return An instance of the ClientAnchorDetail class that will contain\n *         the index number of the column containing the cell whose top\n *         left hand corner also defines the top left hand corner of the\n *         image, the index number column containing the cell whose top\n *         left hand corner also defines the bottom right hand corner of\n *         the image and an inset that determines how far the right hand\n *         edge of the image can protrude into the next column - expressed\n *         as a specific number of co-ordinate positions.\n */\nprivate ClientAnchorDetail fitImageToColumns(HSSFSheet sheet, int colNumber, double reqImageWidthMM, int resizeBehaviour) {\n    double colWidthMM = 0.0D;\n    double colCoordinatesPerMM = 0.0D;\n    int pictureWidthCoordinates = 0;\n    ClientAnchorDetail colClientAnchorDetail = null;\n    // Get the colum's width in millimetres\n    colWidthMM = ConvertImageUnits.widthUnits2Millimetres((short) sheet.getColumnWidth(colNumber));\n    // columns.\n    if (colWidthMM < reqImageWidthMM) {\n        // Should the column's width simply be expanded?\n        if ((resizeBehaviour == AddDimensionedImage.EXPAND_COLUMN) || (resizeBehaviour == AddDimensionedImage.EXPAND_ROW_AND_COLUMN)) {\n            // Set the width of the column by converting the required image\n            // width from millimetres into Excel's column width units.\n            sheet.setColumnWidth(colNumber, ConvertImageUnits.millimetres2WidthUnits(reqImageWidthMM));\n            // To make the image occupy the full width of the column, convert\n            // the required width of the image into co-ordinates. This value\n            // will become the inset for the ClientAnchorDetail class that\n            // is then instantiated.\n            colWidthMM = reqImageWidthMM;\n            colCoordinatesPerMM = ConvertImageUnits.TOTAL_COLUMN_COORDINATE_POSITIONS / colWidthMM;\n            pictureWidthCoordinates = (int) (reqImageWidthMM * colCoordinatesPerMM);\n            colClientAnchorDetail = new ClientAnchorDetail(colNumber, colNumber, pictureWidthCoordinates);\n        } else // the image out across one or more columns.\n        if ((resizeBehaviour == AddDimensionedImage.OVERLAY_ROW_AND_COLUMN) || (resizeBehaviour == AddDimensionedImage.EXPAND_ROW)) {\n            colClientAnchorDetail = this.calculateColumnLocation(sheet, colNumber, reqImageWidthMM);\n        }\n    } else // If the column is wider than the image.\n    {\n        // Mow many co-ordinate positions are there per millimetre?\n        colCoordinatesPerMM = ConvertImageUnits.TOTAL_COLUMN_COORDINATE_POSITIONS / colWidthMM;\n        // Given the width of the image, what should be it's co-ordinate?\n        pictureWidthCoordinates = (int) (reqImageWidthMM * colCoordinatesPerMM);\n        colClientAnchorDetail = new ClientAnchorDetail(colNumber, colNumber, pictureWidthCoordinates);\n    }\n    return (colClientAnchorDetail);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 74,
+    "code": "/**\n * Determines whether the sheet's row should be re-sized to accomodate\n * the image, adjusts the rows height if necessary and creates then\n * returns a ClientAnchorDetail object that facilitates construction of\n * an HSSFClientAnchor that will fix the image on the sheet and establish\n * it's size.\n *\n * @param sheet A reference to the sheet that will 'contain' the image.\n * @param rowNumber A primtive int that contains the index number of a\n *                  row on the sheet.\n * @param reqImageHeightMM A primtive double that contains the required\n *                         height of the image in millimetres\n * @param resizeBehaviour A primitve int whose value will indicate how the\n *                        height of the row should be adjusted if the\n *                        required height of the image is greater than the\n *                        height of the row.\n * @return An instance of the ClientAnchorDetail class that will contain\n *         the index number of the row containing the cell whose top\n *         left hand corner also defines the top left hand corner of the\n *         image, the index number of the row containing the cell whose\n *         top left hand corner also defines the bottom right hand\n *         corner of the image and an inset that determines how far the\n *         bottom edge of the image can protrude into the next (lower)\n *         row - expressed as a specific number of co-ordinate positions.\n */\nprivate ClientAnchorDetail fitImageToRows(HSSFSheet sheet, int rowNumber, double reqImageHeightMM, int resizeBehaviour) {\n    HSSFRow row = null;\n    double rowHeightMM = 0.0D;\n    double rowCoordinatesPerMM = 0.0D;\n    int pictureHeightCoordinates = 0;\n    ClientAnchorDetail rowClientAnchorDetail = null;\n    // Get the row and it's height\n    row = sheet.getRow(rowNumber);\n    if (row == null) {\n        // Create row if it does not exist.\n        row = sheet.createRow(rowNumber);\n    }\n    // Get the row's height in millimetres\n    rowHeightMM = row.getHeightInPoints() / ConvertImageUnits.POINTS_PER_MILLIMETRE;\n    // row or overlay the image across a series of rows.\n    if (rowHeightMM < reqImageHeightMM) {\n        if ((resizeBehaviour == AddDimensionedImage.EXPAND_ROW) || (resizeBehaviour == AddDimensionedImage.EXPAND_ROW_AND_COLUMN)) {\n            row.setHeightInPoints((float) (reqImageHeightMM * ConvertImageUnits.POINTS_PER_MILLIMETRE));\n            rowHeightMM = reqImageHeightMM;\n            rowCoordinatesPerMM = ConvertImageUnits.TOTAL_ROW_COORDINATE_POSITIONS / rowHeightMM;\n            pictureHeightCoordinates = (int) (reqImageHeightMM * rowCoordinatesPerMM);\n            rowClientAnchorDetail = new ClientAnchorDetail(rowNumber, rowNumber, pictureHeightCoordinates);\n        } else // the image out ver one or more rows.\n        if ((resizeBehaviour == AddDimensionedImage.OVERLAY_ROW_AND_COLUMN) || (resizeBehaviour == AddDimensionedImage.EXPAND_COLUMN)) {\n            rowClientAnchorDetail = this.calculateRowLocation(sheet, rowNumber, reqImageHeightMM);\n        }\n    } else // Else, if the image is smaller than the space available\n    {\n        rowCoordinatesPerMM = ConvertImageUnits.TOTAL_ROW_COORDINATE_POSITIONS / rowHeightMM;\n        pictureHeightCoordinates = (int) (reqImageHeightMM * rowCoordinatesPerMM);\n        rowClientAnchorDetail = new ClientAnchorDetail(rowNumber, rowNumber, pictureHeightCoordinates);\n    }\n    return (rowClientAnchorDetail);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 75,
+    "code": "/**\n * If the image is to overlie more than one column, calculations need to be\n * performed to determine how many columns and whether the image will\n * overlie just a part of one column in order to be presented at the\n * required size.\n *\n * @param sheet The sheet that will 'contain' the image.\n * @param startingColumn A primitive int whose value is the index of the\n *                       column that contains the cell whose top left hand\n *                       corner should be aligned with the top left hand\n *                       corner of the image.\n * @param reqImageWidthMM A primitive double whose value will indicate the\n *                        required width of the image in millimetres.\n * @return An instance of the ClientAnchorDetail class that will contain\n *         the index number of the column containing the cell whose top\n *         left hand corner also defines the top left hand corner of the\n *         image, the index number column containing the cell whose top\n *         left hand corner also defines the bottom right hand corner of\n *         the image and an inset that determines how far the right hand\n *         edge of the image can protrude into the next column - expressed\n *         as a specific number of co-ordinate positions.\n */\nprivate ClientAnchorDetail calculateColumnLocation(HSSFSheet sheet, int startingColumn, double reqImageWidthMM) {\n    ClientAnchorDetail anchorDetail = null;\n    double totalWidthMM = 0.0D;\n    double colWidthMM = 0.0D;\n    double overlapMM = 0.0D;\n    double coordinatePositionsPerMM = 0.0D;\n    int toColumn = startingColumn;\n    int inset = 0;\n    // span in order to be presented at the required size.\n    while (totalWidthMM < reqImageWidthMM) {\n        colWidthMM = ConvertImageUnits.widthUnits2Millimetres((short) (sheet.getColumnWidth(toColumn)));\n        // Note use of the cell border width constant. Testing with an image\n        // declared to fit exactly into one column demonstrated that it's\n        // width was greater than the width of the column the POI returned.\n        // Further, this difference was a constant value that I am assuming\n        // related to the cell's borders. Either way, that difference needs\n        // to be allowed for in this calculation.\n        totalWidthMM += (colWidthMM + ConvertImageUnits.CELL_BORDER_WIDTH_MILLIMETRES);\n        toColumn++;\n    }\n    // De-crement by one the last column value.\n    toColumn--;\n    // Convert both values to ints to perform the test.\n    if ((int) totalWidthMM == (int) reqImageWidthMM) {\n        // A problem could occur if the image is sized to fit into one or\n        // more columns. If that occurs, the value in the toColumn variable\n        // will be in error. To overcome this, there are two options, to\n        // ibcrement the toColumn variable's value by one or to pass the\n        // total number of co-ordinate positions to the third paramater\n        // of the ClientAnchorDetail constructor. For no sepcific reason,\n        // the latter option is used below.\n        anchorDetail = new ClientAnchorDetail(startingColumn, toColumn, ConvertImageUnits.TOTAL_COLUMN_COORDINATE_POSITIONS);\n    } else // In this case, the image will overlap part of another column and it is\n    // necessary to calculate just how much - this will become the inset\n    // for the ClientAnchorDetail object.\n    {\n        // Firstly, claculate how much of the image should overlap into\n        // the next column.\n        overlapMM = reqImageWidthMM - (totalWidthMM - colWidthMM);\n        // be setting the overlapMM value to zero.\n        if (overlapMM < 0) {\n            overlapMM = 0.0D;\n        }\n        // Next, from the columns width, calculate how many co-ordinate\n        // positons there are per millimetre\n        coordinatePositionsPerMM = ConvertImageUnits.TOTAL_COLUMN_COORDINATE_POSITIONS / colWidthMM;\n        // From this figure, determine how many co-ordinat positions to\n        // inset the left hand or bottom edge of the image.\n        inset = (int) (coordinatePositionsPerMM * overlapMM);\n        // Now create the ClientAnchorDetail object, setting the from and to\n        // columns and the inset.\n        anchorDetail = new ClientAnchorDetail(startingColumn, toColumn, inset);\n    }\n    return (anchorDetail);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 76,
+    "code": "/**\n * If the image is to overlie more than one rows, calculations need to be\n * performed to determine how many rows and whether the image will\n * overlie just a part of one row in order to be presented at the\n * required size.\n *\n * @param sheet The sheet that will 'contain' the image.\n * @param startingRow A primitive int whose value is the index of the row\n *                    that contains the cell whose top left hand corner\n *                    should be aligned with the top left hand corner of\n *                    the image.\n * @param reqImageHeightMM A primitive double whose value will indicate the\n *                         required height of the image in millimetres.\n * @return An instance of the ClientAnchorDetail class that will contain\n *         the index number of the row containing the cell whose top\n *         left hand corner also defines the top left hand corner of the\n *         image, the index number of the row containing the cell whose top\n *         left hand corner also defines the bottom right hand corner of\n *         the image and an inset that determines how far the bottom edge\n *         can protrude into the next (lower) row - expressed as a specific\n *         number of co-ordinate positions.\n */\nprivate ClientAnchorDetail calculateRowLocation(HSSFSheet sheet, int startingRow, double reqImageHeightMM) {\n    ClientAnchorDetail clientAnchorDetail = null;\n    HSSFRow row = null;\n    double rowHeightMM = 0.0D;\n    double totalRowHeightMM = 0.0D;\n    double overlapMM = 0.0D;\n    double rowCoordinatesPerMM = 0.0D;\n    int toRow = startingRow;\n    int inset = 0;\n    // heights.\n    while (totalRowHeightMM < reqImageHeightMM) {\n        row = sheet.getRow(toRow);\n        // it here.\n        if (row == null) {\n            row = sheet.createRow(toRow);\n        }\n        // Get the row's height in millimetres and add to the running total.\n        rowHeightMM = row.getHeightInPoints() / ConvertImageUnits.POINTS_PER_MILLIMETRE;\n        totalRowHeightMM += rowHeightMM;\n        toRow++;\n    }\n    // Owing to the way the loop above works, the rowNumber will have been\n    // incremented one row too far. Undo that here.\n    toRow--;\n    // I do not really like it!!\n    if ((int) totalRowHeightMM == (int) reqImageHeightMM) {\n        clientAnchorDetail = new ClientAnchorDetail(startingRow, toRow, ConvertImageUnits.TOTAL_ROW_COORDINATE_POSITIONS);\n    } else {\n        // Calculate how far the image will project into the next row. Note\n        // that the height of the last row assessed is subtracted from the\n        // total height of all rows assessed so far.\n        overlapMM = reqImageHeightMM - (totalRowHeightMM - rowHeightMM);\n        // the image is very close indeed to the column size.\n        if (overlapMM < 0) {\n            overlapMM = 0.0D;\n        }\n        rowCoordinatesPerMM = ConvertImageUnits.TOTAL_ROW_COORDINATE_POSITIONS / rowHeightMM;\n        inset = (int) (overlapMM * rowCoordinatesPerMM);\n        clientAnchorDetail = new ClientAnchorDetail(startingRow, toRow, inset);\n    }\n    return (clientAnchorDetail);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 77,
+    "code": "/**\n * Loads - reads in and converts into an array of byte(s) - an image from\n * a named file.\n *\n * Note: this method should be modified so that the type of the image may\n * also be passed to it. Currently, it assumes that all images are\n * JPG/JPEG(s).\n *\n * @param imageFilename A String that encapsulates the path to and name\n *                      of the file that contains the image which is to be\n *                      'loaded'.\n * @return An array of type byte that contains the raw data of the named\n *         image.\n * @throws java.io.FileNotFoundException Thrown if it was not possible to\n *                                       open the specified file.\n * @throws java.io.IOException Thrown if reading the file failed or was\n *                             interrupted.\n */\nprivate byte[] imageToBytes(String imageFilename) throws IOException {\n    File imageFile = null;\n    FileInputStream fis = null;\n    ByteArrayOutputStream bos = null;\n    int read = 0;\n    try {\n        imageFile = new File(imageFilename);\n        fis = new FileInputStream(imageFile);\n        bos = new ByteArrayOutputStream();\n        while ((read = fis.read()) != -1) {\n            bos.write(read);\n        }\n        return (bos.toByteArray());\n    } finally {\n        if (fis != null) {\n            try {\n                fis.close();\n                fis = null;\n            } catch (IOException ioEx) {\n            // Nothing to do here\n            }\n        }\n    }\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 78,
+    "code": "/**\n * The main entry point to the program. It contains code that demonstrates\n * one way to use the program.\n *\n * Note, the code is not restricted to use on new workbooks only. If an\n * image is to be inserted into an existing workbook. just open that\n * workbook, gat a reference to a sheet and pass that;\n *\n *      AddDimensionedImage addImage = new AddDimensionedImage();\n *\n *      File file = new File(\"....... Existing Workbook .......\");\n *      FileInputStream fis = new FileInputStream(file);\n *      HSSFWorkbook workbook = new HSSFWorkbook(fis);\n *      HSSFSheet sheet = workbook.getSheetAt(0);\n *      addImage.addImageToSheet(\"C3\", sheet, \"image.jpg\", 30, 20,\n *          AddDimensionedImage.EXPAND.ROW);\n *\n * @param args the command line arguments\n */\npublic static void main(String[] args) {\n    String imageFile = null;\n    String outputFile = null;\n    FileOutputStream fos = null;\n    HSSFSheet sheet = null;\n    try {\n        if (args.length < 2) {\n            System.err.println(\"Usage: AddDimensionedImage imageFile outputFile\");\n            return;\n        }\n        imageFile = args[0];\n        outputFile = args[1];\n        HSSFWorkbook workbook = new HSSFWorkbook();\n        try {\n            sheet = workbook.createSheet(\"Picture Test\");\n            new AddDimensionedImage().addImageToSheet(\"A1\", sheet, imageFile, 125, 125, AddDimensionedImage.EXPAND_ROW_AND_COLUMN);\n            fos = new FileOutputStream(outputFile);\n            workbook.write(fos);\n        } finally {\n            workbook.close();\n        }\n    } catch (FileNotFoundException fnfEx) {\n        System.out.println(\"Caught an: \" + fnfEx.getClass().getName());\n        System.out.println(\"Message: \" + fnfEx.getMessage());\n        System.out.println(\"Stacktrace follows...........\");\n        fnfEx.printStackTrace(System.out);\n    } catch (IOException ioEx) {\n        System.out.println(\"Caught an: \" + ioEx.getClass().getName());\n        System.out.println(\"Message: \" + ioEx.getMessage());\n        System.out.println(\"Stacktrace follows...........\");\n        ioEx.printStackTrace(System.out);\n    } finally {\n        try {\n            if (fos != null) {\n                fos.close();\n                fos = null;\n            }\n        } catch (IOException ioEx) {\n        // I G N O R E\n        }\n    }\n}",
+    "method_record_id": [
+      1352,
+      24
+    ]
+  },
+  {
+    "trace_id": 79,
+    "code": "/**\n * Get one of the number of the column or row that contains the cell\n * whose top left hand corner will be aligned with the top left hand\n * corner of the image.\n *\n * @return The value - row or column index - for one of the co-ordinates\n *         of the top left hand corner of the image.\n */\npublic int getFromIndex() {\n    return (this.fromIndex);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 80,
+    "code": "/**\n * Get one of the number of the column or row that contains the cell\n * whose top left hand corner will be aligned with the bottom righ hand\n * corner of the image.\n *\n * @return The value - row or column index - for one of the co-ordinates\n *         of the bottom right hand corner of the image.\n */\npublic int getToIndex() {\n    return (this.toIndex);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 81,
+    "code": "/**\n * Get the image's offset from the edge of a cell.\n *\n * @return How far either the right hand or bottom edge of the image is\n *         inset from the left hand or top edge of a cell.\n */\npublic int getInset() {\n    return (this.inset);\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 82,
+    "code": "/**\n * pixel units to excel width units(units of 1/256th of a character width)\n * @param pxs\n * @return\n */\npublic static short pixel2WidthUnits(int pxs) {\n    short widthUnits = (short) (EXCEL_COLUMN_WIDTH_FACTOR * (pxs / UNIT_OFFSET_LENGTH));\n    widthUnits += UNIT_OFFSET_MAP[(pxs % UNIT_OFFSET_LENGTH)];\n    return widthUnits;\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 83,
+    "code": "/**\n * excel width units(units of 1/256th of a character width) to pixel\n * units.\n *\n * @param widthUnits\n * @return\n */\npublic static int widthUnits2Pixel(short widthUnits) {\n    int pixels = (widthUnits / EXCEL_COLUMN_WIDTH_FACTOR) * UNIT_OFFSET_LENGTH;\n    int offsetWidthUnits = widthUnits % EXCEL_COLUMN_WIDTH_FACTOR;\n    pixels += Math.round(offsetWidthUnits / ((float) EXCEL_COLUMN_WIDTH_FACTOR / UNIT_OFFSET_LENGTH));\n    return pixels;\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 84,
+    "code": "/**\n * Convert Excel's width units into millimetres.\n *\n * @param widthUnits The width of the column or the height of the\n *                   row in Excel's units.\n * @return A primitive double that contains the columns width or rows\n *         height in millimetres.\n */\npublic static double widthUnits2Millimetres(short widthUnits) {\n    return (ConvertImageUnits.widthUnits2Pixel(widthUnits) / ConvertImageUnits.PIXELS_PER_MILLIMETRES);\n}",
+    "method_record_id": [
+      1357
+    ]
+  },
+  {
+    "trace_id": 85,
+    "code": "/**\n * Convert into millimetres Excel's width units..\n *\n * @param millimetres A primitive double that contains the columns\n *                    width or rows height in millimetres.\n * @return A primitive int that contains the columns width or rows\n *         height in Excel's units.\n */\npublic static int millimetres2WidthUnits(double millimetres) {\n    return (ConvertImageUnits.pixel2WidthUnits((int) (millimetres * ConvertImageUnits.PIXELS_PER_MILLIMETRES)));\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 86,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet sheet = wb.createSheet(\"new sheet\");\n    HSSFRow row = sheet.createRow(2);\n    createCell(wb, row, 0, HorizontalAlignment.CENTER);\n    createCell(wb, row, 1, HorizontalAlignment.CENTER_SELECTION);\n    createCell(wb, row, 2, HorizontalAlignment.FILL);\n    createCell(wb, row, 3, HorizontalAlignment.GENERAL);\n    createCell(wb, row, 4, HorizontalAlignment.JUSTIFY);\n    createCell(wb, row, 5, HorizontalAlignment.LEFT);\n    createCell(wb, row, 6, HorizontalAlignment.RIGHT);\n    // Write the output to a file\n    FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n    wb.write(fileOut);\n    fileOut.close();\n    wb.close();\n}",
+    "method_record_id": [
+      7248
+    ]
+  },
+  {
+    "trace_id": 87,
+    "code": "/**\n * Creates a cell and aligns it a certain way.\n *\n * @param wb        the workbook\n * @param row       the row to create the cell in\n * @param column    the column number to create the cell in\n * @param align     the alignment for the cell.\n */\nprivate static void createCell(HSSFWorkbook wb, HSSFRow row, int column, HorizontalAlignment align) {\n    HSSFCell cell = row.createCell(column);\n    cell.setCellValue(\"Align It\");\n    HSSFCellStyle cellStyle = wb.createCellStyle();\n    cellStyle.setAlignment(align);\n    cell.setCellStyle(cellStyle);\n}",
+    "method_record_id": [
+      3898,
+      4133
+    ]
+  },
+  {
+    "trace_id": 88,
+    "code": "public static void main(String[] args) throws IOException {\n    int rownum;\n    // create a new workbook\n    HSSFWorkbook wb = new HSSFWorkbook();\n    try {\n        // create a new sheet\n        HSSFSheet s = wb.createSheet();\n        // declare a row object reference\n        HSSFRow r = null;\n        // declare a cell object reference\n        HSSFCell c = null;\n        // create 3 cell styles\n        HSSFCellStyle cs = wb.createCellStyle();\n        HSSFCellStyle cs2 = wb.createCellStyle();\n        HSSFCellStyle cs3 = wb.createCellStyle();\n        // create 2 fonts objects\n        HSSFFont f = wb.createFont();\n        HSSFFont f2 = wb.createFont();\n        // set font 1 to 12 point type\n        f.setFontHeightInPoints((short) 12);\n        // make it red\n        f.setColor(HSSFColorPredefined.RED.getIndex());\n        // make it bold\n        // arial is the default font\n        f.setBold(true);\n        // set font 2 to 10 point type\n        f2.setFontHeightInPoints((short) 10);\n        // make it the color at palette index 0xf (white)\n        f2.setColor(HSSFColorPredefined.WHITE.getIndex());\n        // make it bold\n        f2.setBold(true);\n        // set cell stlye\n        cs.setFont(f);\n        // set the cell format see HSSFDataFromat for a full list\n        cs.setDataFormat(HSSFDataFormat.getBuiltinFormat(\"($#,##0_);[Red]($#,##0)\"));\n        // set a thin border\n        cs2.setBorderBottom(BorderStyle.THIN);\n        // fill w fg fill color\n        cs2.setFillPattern(FillPatternType.SOLID_FOREGROUND);\n        // set foreground fill to red\n        cs2.setFillForegroundColor(HSSFColorPredefined.RED.getIndex());\n        // set the font\n        cs2.setFont(f2);\n        // set the sheet name to HSSF Test\n        wb.setSheetName(0, \"HSSF Test\");\n        // create a sheet with 300 rows (0-299)\n        for (rownum = 0; rownum < 300; rownum++) {\n            // create a row\n            r = s.createRow(rownum);\n            // on every other row\n            if ((rownum % 2) == 0) {\n                // make the row height bigger  (in twips - 1/20 of a point)\n                r.setHeight((short) 0x249);\n            }\n            // create 50 cells (0-49) (the += 2 becomes apparent later\n            for (int cellnum = 0; cellnum < 50; cellnum += 2) {\n                // create a numeric cell\n                c = r.createCell(cellnum);\n                // do some goofy math to demonstrate decimals\n                c.setCellValue(rownum * 10000 + cellnum + (((double) rownum / 1000) + ((double) cellnum / 10000)));\n                // on every other row\n                if ((rownum % 2) == 0) {\n                    // set this cell to the first cell style we defined\n                    c.setCellStyle(cs);\n                }\n                // create a string cell (see why += 2 in the\n                c = r.createCell(cellnum + 1);\n                // set the cell's string value to \"TEST\"\n                c.setCellValue(\"TEST\");\n                // make this column a bit wider\n                s.setColumnWidth(cellnum + 1, (int) ((50 * 8) / ((double) 1 / 20)));\n                // on every other row\n                if ((rownum % 2) == 0) {\n                    // set this to the white on red cell style\n                    // we defined above\n                    c.setCellStyle(cs2);\n                }\n            }\n        }\n        // draw a thick black border on the row at the bottom using BLANKS\n        // advance 2 rows\n        rownum++;\n        rownum++;\n        r = s.createRow(rownum);\n        // define the third style to be the default\n        // except with a thick black border at the bottom\n        cs3.setBorderBottom(BorderStyle.THICK);\n        // create 50 cells\n        for (int cellnum = 0; cellnum < 50; cellnum++) {\n            // create a blank type cell (no value)\n            c = r.createCell(cellnum);\n            // set it to the thick black border style\n            c.setCellStyle(cs3);\n        }\n        // end draw thick black border\n        // demonstrate adding/naming and deleting a sheet\n        // create a sheet, set its title then delete it\n        wb.createSheet();\n        wb.setSheetName(1, \"DeletedSheet\");\n        wb.removeSheetAt(1);\n        // end deleted sheet\n        // create a new file\n        FileOutputStream out = new FileOutputStream(\"workbook.xls\");\n        // write the workbook to the output stream\n        // close our file (don't blow out our file handles\n        wb.write(out);\n        out.close();\n    } finally {\n        wb.close();\n    }\n}",
+    "method_record_id": [
+      3926,
+      396,
+      4406,
+      9
+    ]
+  },
+  {
+    "trace_id": 89,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    try {\n        HSSFSheet sheet = wb.createSheet(\"new sheet\");\n        // Create a row and put some cells in it. Rows are 0 based.\n        HSSFRow row = sheet.createRow(1);\n        // Create a cell and put a value in it.\n        HSSFCell cell = row.createCell(1);\n        cell.setCellValue(4);\n        // Style the cell with borders all around.\n        HSSFCellStyle style = wb.createCellStyle();\n        style.setBorderBottom(BorderStyle.THIN);\n        style.setBottomBorderColor(HSSFColorPredefined.BLACK.getIndex());\n        style.setBorderLeft(BorderStyle.THIN);\n        style.setLeftBorderColor(HSSFColorPredefined.GREEN.getIndex());\n        style.setBorderRight(BorderStyle.THIN);\n        style.setRightBorderColor(HSSFColorPredefined.BLUE.getIndex());\n        style.setBorderTop(BorderStyle.MEDIUM_DASHED);\n        style.setTopBorderColor(HSSFColorPredefined.ORANGE.getIndex());\n        cell.setCellStyle(style);\n        // Write the output to a file\n        FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n        wb.write(fileOut);\n        fileOut.close();\n    } finally {\n        wb.close();\n    }\n}",
+    "method_record_id": [
+      3899,
+      3900,
+      3876,
+      3927
+    ]
+  },
+  {
+    "trace_id": 90,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    try {\n        HSSFSheet sheet = wb.createSheet(\"Cell comments in POI HSSF\");\n        // Create the drawing patriarch. This is the top level container for all shapes including cell comments.\n        HSSFPatriarch patr = sheet.createDrawingPatriarch();\n        // create a cell in row 3\n        HSSFCell cell1 = sheet.createRow(3).createCell(1);\n        cell1.setCellValue(new HSSFRichTextString(\"Hello, World\"));\n        // anchor defines size and position of the comment in worksheet\n        HSSFComment comment1 = patr.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));\n        // set text in the comment\n        comment1.setString(new HSSFRichTextString(\"We can set comments in POI\"));\n        // set comment author.\n        // you can see it in the status bar when moving mouse over the commented cell\n        comment1.setAuthor(\"Apache Software Foundation\");\n        // The first way to assign comment to a cell is via HSSFCell.setCellComment method\n        cell1.setCellComment(comment1);\n        // create another cell in row 6\n        HSSFCell cell2 = sheet.createRow(6).createCell(1);\n        cell2.setCellValue(36.6);\n        HSSFComment comment2 = patr.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 8, (short) 6, 11));\n        // modify background color of the comment\n        comment2.setFillColor(204, 236, 255);\n        HSSFRichTextString string = new HSSFRichTextString(\"Normal body temperature\");\n        // apply custom font to the text in the comment\n        HSSFFont font = wb.createFont();\n        font.setFontName(\"Arial\");\n        font.setFontHeightInPoints((short) 10);\n        font.setBold(true);\n        font.setColor(HSSFColorPredefined.RED.getIndex());\n        string.applyFont(font);\n        comment2.setString(string);\n        // by default comments are hidden. This one is always visible.\n        comment2.setVisible(true);\n        comment2.setAuthor(\"Bill Gates\");\n        /**\n         * The second way to assign comment to a cell is to implicitly specify its row and column.\n         * Note, it is possible to set row and column of a non-existing cell.\n         * It works, the comment is visible.\n         */\n        comment2.setRow(6);\n        comment2.setColumn(1);\n        FileOutputStream out = new FileOutputStream(\"poi_comment.xls\");\n        wb.write(out);\n        out.close();\n    } finally {\n        wb.close();\n    }\n}",
+    "method_record_id": [
+      4392,
+      9,
+      3951
+    ]
+  },
+  {
+    "trace_id": 91,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    try {\n        HSSFSheet sheet = wb.createSheet(\"new sheet\");\n        HSSFRow row = sheet.createRow(2);\n        row.createCell(0).setCellValue(1.1);\n        row.createCell(1).setCellValue(new Date());\n        row.createCell(2).setCellValue(\"a string\");\n        row.createCell(3).setCellValue(true);\n        row.createCell(4).setCellType(CellType.ERROR);\n        // Write the output to a file\n        FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n        wb.write(fileOut);\n        fileOut.close();\n    } finally {\n        wb.close();\n    }\n}",
+    "method_record_id": [
+      3861
+    ]
+  },
+  {
+    "trace_id": 92,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet sheet = wb.createSheet(\"new sheet\");\n    // Create a row and put some cells in it. Rows are 0 based.\n    HSSFRow row = sheet.createRow(0);\n    // Create a cell and put a value in it.\n    HSSFCell cell = row.createCell(0);\n    cell.setCellValue(1);\n    // Or do it on one line.\n    row.createCell(1).setCellValue(1.2);\n    row.createCell(2).setCellValue(\"This is a string\");\n    row.createCell(3).setCellValue(true);\n    // Write the output to a file\n    FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n    wb.write(fileOut);\n    fileOut.close();\n    wb.close();\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 93,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet sheet = wb.createSheet(\"new sheet\");\n    // Create a row and put some cells in it. Rows are 0 based.\n    HSSFRow row = sheet.createRow(0);\n    // Create a cell and put a date value in it.  The first cell is not styled as a date.\n    HSSFCell cell = row.createCell(0);\n    cell.setCellValue(new Date());\n    // we style the second cell as a date (and time).  It is important to create a new cell style from the workbook\n    // otherwise you can end up modifying the built in style and effecting not only this cell but other cells.\n    HSSFCellStyle cellStyle = wb.createCellStyle();\n    cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat(\"m/d/yy h:mm\"));\n    cell = row.createCell(1);\n    cell.setCellValue(new Date());\n    cell.setCellStyle(cellStyle);\n    // Write the output to a file\n    FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n    wb.write(fileOut);\n    fileOut.close();\n    wb.close();\n}",
+    "method_record_id": [
+      3861,
+      3901
+    ]
+  },
+  {
+    "trace_id": 94,
+    "code": "@SuppressWarnings(\"unused\")\npublic static void main(String[] args) throws Exception {\n    POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(args[0]));\n    HSSFWorkbook workbook = new HSSFWorkbook(fs);\n    for (HSSFObjectData obj : workbook.getAllEmbeddedObjects()) {\n        // the OLE2 Class Name of the object\n        String oleName = obj.getOLE2ClassName();\n        DirectoryNode dn = (obj.hasDirectoryEntry()) ? (DirectoryNode) obj.getDirectory() : null;\n        Closeable document = null;\n        if (oleName.equals(\"Worksheet\")) {\n            document = new HSSFWorkbook(dn, fs, false);\n        } else if (oleName.equals(\"Document\")) {\n            document = new HWPFDocument(dn);\n        } else if (oleName.equals(\"Presentation\")) {\n            document = new HSLFSlideShow(dn);\n        } else {\n            if (dn != null) {\n                // The DirectoryEntry is a DocumentNode. Examine its entries to find out what it is\n                for (Entry entry : dn) {\n                    String name = entry.getName();\n                }\n            } else {\n                // There is no DirectoryEntry\n                // Recover the object's data from the HSSFObjectData instance.\n                byte[] objectData = obj.getObjectData();\n            }\n        }\n        if (document != null) {\n            document.close();\n        }\n    }\n    workbook.close();\n}",
+    "method_record_id": [
+      4217,
+      4074,
+      4075,
+      1919
+    ]
+  },
+  {
+    "trace_id": 95,
+    "code": "/**\n * This method listens for incoming records and handles them as required.\n * @param record    The record that was found while reading.\n */\n@Override\npublic void processRecord(Record record) {\n    switch(record.getSid()) {\n        // the BOFRecord can represent either the beginning of a sheet or the workbook\n        case BOFRecord.sid:\n            BOFRecord bof = (BOFRecord) record;\n            if (bof.getType() == BOFRecord.TYPE_WORKBOOK) {\n                System.out.println(\"Encountered workbook\");\n            // assigned to the class level member\n            } else if (bof.getType() == BOFRecord.TYPE_WORKSHEET) {\n                System.out.println(\"Encountered sheet reference\");\n            }\n            break;\n        case BoundSheetRecord.sid:\n            BoundSheetRecord bsr = (BoundSheetRecord) record;\n            System.out.println(\"New sheet named: \" + bsr.getSheetname());\n            break;\n        case RowRecord.sid:\n            RowRecord rowrec = (RowRecord) record;\n            System.out.println(\"Row found, first column at \" + rowrec.getFirstCol() + \" last column at \" + rowrec.getLastCol());\n            break;\n        case NumberRecord.sid:\n            NumberRecord numrec = (NumberRecord) record;\n            System.out.println(\"Cell found with value \" + numrec.getValue() + \" at row \" + numrec.getRow() + \" and column \" + numrec.getColumn());\n            break;\n        // SSTRecords store a array of unique strings used in Excel.\n        case SSTRecord.sid:\n            sstrec = (SSTRecord) record;\n            for (int k = 0; k < sstrec.getNumUniqueStrings(); k++) {\n                System.out.println(\"String table value \" + k + \" = \" + sstrec.getString(k));\n            }\n            break;\n        case LabelSSTRecord.sid:\n            LabelSSTRecord lrec = (LabelSSTRecord) record;\n            System.out.println(\"String cell found with value \" + sstrec.getString(lrec.getSSTIndex()));\n            break;\n    }\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 96,
+    "code": "/**\n * Read an excel file and spit out what we find.\n *\n * @param args      Expect one argument that is the file to read.\n * @throws IOException  When there is an error processing the file.\n */\npublic static void main(String[] args) throws IOException {\n    // create a new file input stream with the input file specified\n    // at the command line\n    FileInputStream fin = new FileInputStream(args[0]);\n    // create a new org.apache.poi.poifs.filesystem.Filesystem\n    POIFSFileSystem poifs = new POIFSFileSystem(fin);\n    // get the Workbook (excel part) stream in a InputStream\n    InputStream din = poifs.createDocumentInputStream(\"Workbook\");\n    // construct out HSSFRequest object\n    HSSFRequest req = new HSSFRequest();\n    // lazy listen for ALL records with the listener shown above\n    req.addListenerForAllRecords(new EventExample());\n    // create our event factory\n    HSSFEventFactory factory = new HSSFEventFactory();\n    // process our events based on the document input stream\n    factory.processEvents(req, din);\n    // once all the events are processed close our file input stream\n    fin.close();\n    // and our document input stream (don't want to leak these!)\n    din.close();\n    poifs.close();\n    System.out.println(\"done.\");\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 97,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet sheet = wb.createSheet(\"new sheet\");\n    // Create a row and put some cells in it. Rows are 0 based.\n    HSSFRow row = sheet.createRow(1);\n    // Aqua background\n    HSSFCellStyle style = wb.createCellStyle();\n    style.setFillBackgroundColor(HSSFColorPredefined.AQUA.getIndex());\n    style.setFillPattern(FillPatternType.BIG_SPOTS);\n    HSSFCell cell = row.createCell(1);\n    cell.setCellValue(\"X\");\n    cell.setCellStyle(style);\n    // Orange \"foreground\", foreground being the fill foreground not the font color.\n    style = wb.createCellStyle();\n    style.setFillForegroundColor(HSSFColorPredefined.ORANGE.getIndex());\n    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);\n    cell = row.createCell(2);\n    cell.setCellValue(\"X\");\n    cell.setCellStyle(style);\n    // Write the output to a file\n    FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n    wb.write(fileOut);\n    fileOut.close();\n    wb.close();\n}",
+    "method_record_id": [
+      3930,
+      3876
+    ]
+  },
+  {
+    "trace_id": 98,
+    "code": "/**\n *  creates an {@link HSSFWorkbook} with the specified OS filename.\n */\nprivate static HSSFWorkbook readFile(String filename) throws IOException {\n    FileInputStream fis = new FileInputStream(filename);\n    try {\n        // NOSONAR - should not be closed here\n        return new HSSFWorkbook(fis);\n    } finally {\n        fis.close();\n    }\n}",
+    "method_record_id": []
+  },
+  {
+    "trace_id": 99,
+    "code": "/**\n *  given a filename this outputs a sample sheet with just a set of\n *  rows/cells.\n */\nprivate static void testCreateSampleSheet(String outputFilename) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    try {\n        HSSFSheet s = wb.createSheet();\n        HSSFCellStyle cs = wb.createCellStyle();\n        HSSFCellStyle cs2 = wb.createCellStyle();\n        HSSFCellStyle cs3 = wb.createCellStyle();\n        HSSFFont f = wb.createFont();\n        HSSFFont f2 = wb.createFont();\n        f.setFontHeightInPoints((short) 12);\n        f.setColor((short) 0xA);\n        f.setBold(true);\n        f2.setFontHeightInPoints((short) 10);\n        f2.setColor((short) 0xf);\n        f2.setBold(true);\n        cs.setFont(f);\n        cs.setDataFormat(HSSFDataFormat.getBuiltinFormat(\"($#,##0_);[Red]($#,##0)\"));\n        cs2.setBorderBottom(BorderStyle.THIN);\n        cs2.setFillPattern(FillPatternType.SOLID_FOREGROUND);\n        cs2.setFillForegroundColor((short) 0xA);\n        cs2.setFont(f2);\n        wb.setSheetName(0, \"HSSF Test\");\n        int rownum;\n        for (rownum = 0; rownum < 300; rownum++) {\n            HSSFRow r = s.createRow(rownum);\n            if ((rownum % 2) == 0) {\n                r.setHeight((short) 0x249);\n            }\n            for (int cellnum = 0; cellnum < 50; cellnum += 2) {\n                HSSFCell c = r.createCell(cellnum);\n                c.setCellValue(rownum * 10000 + cellnum + (((double) rownum / 1000) + ((double) cellnum / 10000)));\n                if ((rownum % 2) == 0) {\n                    c.setCellStyle(cs);\n                }\n                c = r.createCell(cellnum + 1);\n                c.setCellValue(new HSSFRichTextString(\"TEST\"));\n                // 50 characters divided by 1/20th of a point\n                s.setColumnWidth(cellnum + 1, (int) (50 * 8 / 0.05));\n                if ((rownum % 2) == 0) {\n                    c.setCellStyle(cs2);\n                }\n            }\n        }\n        // draw a thick black border on the row at the bottom using BLANKS\n        rownum++;\n        rownum++;\n        HSSFRow r = s.createRow(rownum);\n        cs3.setBorderBottom(BorderStyle.THICK);\n        for (int cellnum = 0; cellnum < 50; cellnum++) {\n            HSSFCell c = r.createCell(cellnum);\n            c.setCellStyle(cs3);\n        }\n        s.addMergedRegion(new CellRangeAddress(0, 3, 0, 3));\n        s.addMergedRegion(new CellRangeAddress(100, 110, 100, 110));\n        // end draw thick black border\n        // create a sheet, set its title then delete it\n        wb.createSheet();\n        wb.setSheetName(1, \"DeletedSheet\");\n        wb.removeSheetAt(1);\n        // end deleted sheet\n        FileOutputStream out = new FileOutputStream(outputFilename);\n        try {\n            wb.write(out);\n        } finally {\n            out.close();\n        }\n    } finally {\n        wb.close();\n    }\n}",
+    "method_record_id": [
+      3926,
+      4406,
+      9
+    ]
+  },
+  {
+    "trace_id": 100,
+    "code": "/**\n * Method main\n *\n * Given 1 argument takes that as the filename, inputs it and dumps the\n * cell values/types out to sys.out.<br>\n *\n * given 2 arguments where the second argument is the word \"write\" and the\n * first is the filename - writes out a sample (test) spreadsheet\n * see {@link HSSFReadWrite#testCreateSampleSheet(String)}.<br>\n *\n * given 2 arguments where the first is an input filename and the second\n * an output filename (not write), attempts to fully read in the\n * spreadsheet and fully write it out.<br>\n *\n * given 3 arguments where the first is an input filename and the second an\n * output filename (not write) and the third is \"modify1\", attempts to read in the\n * spreadsheet, deletes rows 0-24, 74-99.  Changes cell at row 39, col 3 to\n * \"MODIFIED CELL\" then writes it out.  Hence this is \"modify test 1\".  If you\n * take the output from the write test, you'll have a valid scenario.\n */\npublic static void main(String[] args) {\n    if (args.length < 1) {\n        System.err.println(\"At least one argument expected\");\n        return;\n    }\n    String fileName = args[0];\n    try {\n        if (args.length < 2) {\n            HSSFWorkbook wb = HSSFReadWrite.readFile(fileName);\n            try {\n                System.out.println(\"Data dump:\\n\");\n                for (int k = 0; k < wb.getNumberOfSheets(); k++) {\n                    HSSFSheet sheet = wb.getSheetAt(k);\n                    int rows = sheet.getPhysicalNumberOfRows();\n                    System.out.println(\"Sheet \" + k + \" \\\"\" + wb.getSheetName(k) + \"\\\" has \" + rows + \" row(s).\");\n                    for (int r = 0; r < rows; r++) {\n                        HSSFRow row = sheet.getRow(r);\n                        if (row == null) {\n                            continue;\n                        }\n                        System.out.println(\"\\nROW \" + row.getRowNum() + \" has \" + row.getPhysicalNumberOfCells() + \" cell(s).\");\n                        for (int c = 0; c < row.getLastCellNum(); c++) {\n                            HSSFCell cell = row.getCell(c);\n                            String value;\n                            if (cell != null) {\n                                switch(cell.getCellTypeEnum()) {\n                                    case FORMULA:\n                                        value = \"FORMULA value=\" + cell.getCellFormula();\n                                        break;\n                                    case NUMERIC:\n                                        value = \"NUMERIC value=\" + cell.getNumericCellValue();\n                                        break;\n                                    case STRING:\n                                        value = \"STRING value=\" + cell.getStringCellValue();\n                                        break;\n                                    case BLANK:\n                                        value = \"<BLANK>\";\n                                        break;\n                                    case BOOLEAN:\n                                        value = \"BOOLEAN value-\" + cell.getBooleanCellValue();\n                                        break;\n                                    case ERROR:\n                                        value = \"ERROR value=\" + cell.getErrorCellValue();\n                                        break;\n                                    default:\n                                        value = \"UNKNOWN value of type \" + cell.getCellTypeEnum();\n                                }\n                                System.out.println(\"CELL col=\" + cell.getColumnIndex() + \" VALUE=\" + value);\n                            }\n                        }\n                    }\n                }\n            } finally {\n                wb.close();\n            }\n        } else if (args.length == 2) {\n            if (args[1].toLowerCase(Locale.ROOT).equals(\"write\")) {\n                System.out.println(\"Write mode\");\n                long time = System.currentTimeMillis();\n                HSSFReadWrite.testCreateSampleSheet(fileName);\n                System.out.println(\"\" + (System.currentTimeMillis() - time) + \" ms generation time\");\n            } else {\n                System.out.println(\"readwrite test\");\n                HSSFWorkbook wb = HSSFReadWrite.readFile(fileName);\n                try {\n                    FileOutputStream stream = new FileOutputStream(args[1]);\n                    try {\n                        wb.write(stream);\n                    } finally {\n                        stream.close();\n                    }\n                } finally {\n                    wb.close();\n                }\n            }\n        } else if (args.length == 3 && args[2].equalsIgnoreCase(\"modify1\")) {\n            // delete row 0-24, row 74 - 99 && change cell 3 on row 39 to string \"MODIFIED CELL!!\"\n            HSSFWorkbook wb = HSSFReadWrite.readFile(fileName);\n            try {\n                HSSFSheet sheet = wb.getSheetAt(0);\n                for (int k = 0; k < 25; k++) {\n                    HSSFRow row = sheet.getRow(k);\n                    sheet.removeRow(row);\n                }\n                for (int k = 74; k < 100; k++) {\n                    HSSFRow row = sheet.getRow(k);\n                    sheet.removeRow(row);\n                }\n                HSSFRow row = sheet.getRow(39);\n                HSSFCell cell = row.getCell(3);\n                cell.setCellValue(\"MODIFIED CELL!!!!!\");\n                FileOutputStream stream = new FileOutputStream(args[1]);\n                try {\n                    wb.write(stream);\n                } finally {\n                    stream.close();\n                }\n            } finally {\n                wb.close();\n            }\n        }\n    } catch (Exception e) {\n        e.printStackTrace();\n    }\n}",
+    "method_record_id": [
+      4193,
+      7622,
+      9,
+      653,
+      3859
+    ]
+  },
+  {
+    "trace_id": 101,
+    "code": "public static void main(String[] args) throws IOException {\n    HSSFWorkbook wb = new HSSFWorkbook();\n    HSSFSheet sheet = wb.createSheet(\"new sheet\");\n    HSSFRow row = sheet.createRow(0);\n    HSSFCell cell = row.createCell(0);\n    cell.setCellType(CellType.FORMULA);\n    cell.setCellFormula(\"HYPERLINK(\\\"http://127.0.0.1:8080/toto/truc/index.html?test=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\", \\\"test\\\")\");\n    FileOutputStream fileOut = new FileOutputStream(\"workbook.xls\");\n    wb.write(fileOut);\n    fileOut.close();\n    wb.close();\n}",
+    "method_record_id": []
+  }
+]
