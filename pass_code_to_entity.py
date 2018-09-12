@@ -114,6 +114,14 @@ def dic_2_json(d):
     return j
 
 
+def get_all_type():
+    pass
+
+
+def is_class_type(value):
+    return False
+
+
 if __name__ == "__main__":
     schema_name = 'domainkg'
     word_set = {'+', '-', '<', '>', '=', '*', '/', '//', '&', '%', '!', '~', 'public', 'static', 'void', 'abstract',
@@ -155,7 +163,8 @@ if __name__ == "__main__":
                     for i, t in enumerate(tokenList):
                         if t.value not in word_set:
                             word_context_set.add(t.value)
-                            if i < len(tokenList) - 1 and tokenList[i + 1].value == '(':
+                            if len(tokenList) - 1 > i > 0 and tokenList[i + 1].value == '(' and is_class_type(
+                                    tokenList[i - 1].value):
                                 query_result = query_method(t.value, word_context_set, qute_counter)
                                 if query_result is not None:
                                     sample_code_list = list()
@@ -193,7 +202,6 @@ if __name__ == "__main__":
                                     if dic_key not in code_record_dict.keys():
                                         code_record_dict[dic_key] = set()
                                     (code_record_dict[dic_key]).add(sample_code_string)
-
 
                                     # method_json_data.append({"trace_id": trace.id,
                                     #                          "method_record_id": query_result.method_id,
