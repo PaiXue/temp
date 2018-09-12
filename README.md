@@ -5,3 +5,4 @@
 - 1: Class Summary
 - 2: Enum Summary
 - 3: Exception Summary
+- 4: Annotation Types Summary

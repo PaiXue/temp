@@ -105,18 +105,19 @@ def get_package_detail_info(file_path, package_name, detail_index, method_index)
                 df.loc[detail_index] = [package_name, name, url, description, type]
                 method_index = get_method_detail(base_path + url, package_name, name, type, method_index)
             detail_index += 1
-        return detail_index, method_index
+    return detail_index, method_index
 
 
 if __name__ == "__main__":
-    d = {'Interface Summary': 0, 'Class Summary': 1, 'Enum Summary': 2, 'Exception Summary': 3}
+    d = {'Interface Summary': 0, 'Class Summary': 1, 'Enum Summary': 2, 'Exception Summary': 3,
+         'Annotation Types Summary': 4}
     detail_index = 0
     method_index = 0
     df = pd.DataFrame(columns=['package_name', 'name', 'url', 'description', 'type'])
     method_detail_df = pd.DataFrame(
         columns=['package_name', 'class_name', 'returnType', 'Method', 'description', 'type'])
 
-    base_path = 'E:/shiyanshi/html/hi/'
+    base_path = 'D:/project/poi_html_full/'
     file_path = base_path + 'overview-summary.html'
     f = open(file_path)
     soup = BeautifulSoup(f, "lxml")

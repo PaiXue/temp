@@ -46,6 +46,53 @@ def match_string_to_method(input_str):
     pass
 
 
+# if __name__ == "__main__":
+#     schema_name = 'domainkg'
+#     word_set = {'+', '-', '<', '>', '=', '*', '/', '//', '&', '%', '!', '~', 'public', 'static', 'void', 'abstract',
+#                 'default', 'double', 'else', 'enum', 'extends', 'final', 'finally', 'float', 'for', 'goto', 'if',
+#                 'implements', 'instanceof', 'int', 'interface', 'long', 'native', 'new', 'package', 'private',
+#                 'protected', 'return', 'short', 'static', 'strictfp', 'super', 'switch', 'synchronized', 'this',
+#                 'throw', 'throws', 'transient', 'try', 'volatile', 'strictfp', 'while', 'Integer', 'String', 'Float',
+#                 'Double', 'File', 'Object', '@throws', 'args', '@param', 'boolean', 'Boolean', 'True', 'False', 'byte',
+#                 'byte[]', '(', ')', '.', ':', ';', '"', '|', '||', 'true', 'false', ','}
+#     engine = EngineFactory.create_engine_by_schema_name(schema_name)
+#     session = EngineFactory.create_session(engine=engine, autocommit=False, echo=False)
+#     trace_list = session.query(Traces).all()
+#     json_data = list()
+#     json_conuter = 0
+#     for trace in trace_list:
+#         code = trace.code
+#         word_context_set = set()
+#         code_list = re.split(r'[{;}]', code)
+#         for line_index, line in enumerate(code_list):
+#             line = line.strip()
+#             line = line.replace("\n", "")
+#             if line != '':
+#                 line += ' '
+#                 tokens = javalang.tokenizer.tokenize(line)
+#                 qute_counter = len(line.split(',')) - 1
+#                 try:
+#                     tokenList = list(tokens)
+#                     for i, t in enumerate(tokenList):
+#                         if t.value not in word_set:
+#                             word_context_set.add(t.value)
+#                             if i < len(tokenList) - 1 and tokenList[i + 1].value == '(':
+#                                 query_result = query_method(t.value, word_context_set, qute_counter)
+#                                 if query_result is not None:
+#                                     json_data.append({"trace_id": trace.id,
+#                                                       "method_record_id": query_result.method_id,
+#                                                       "sample_code_list": query_result.method_id,
+#                                                       })
+#                 except Exception:
+#                     print("error")
+#                     continue
+#
+#         json_conuter += 1
+#         if json_conuter > 100:
+#             break
+#     with open('data.json', 'w') as outfile:
+#         json.dump(json_data, outfile)
+
 if __name__ == "__main__":
     schema_name = 'domainkg'
     word_set = {'+', '-', '<', '>', '=', '*', '/', '//', '&', '%', '!', '~', 'public', 'static', 'void', 'abstract',
@@ -59,14 +106,21 @@ if __name__ == "__main__":
     session = EngineFactory.create_session(engine=engine, autocommit=False, echo=False)
     trace_list = session.query(Traces).all()
     json_data = list()
+    method_json_data = list()
+
     json_conuter = 0
     for trace in trace_list:
         # trace = session.query(Traces).filter_by(id=id).first()
         code = trace.code
         word_context_set = set()
-        code_list = re.split(r'[{;}]', code)
+        code_list = re.split(r'[\n]', code)
+        # code_list = re.split(r'[{;}]', code)
         related_method_list = []
-        for line in code_list:
+        sample_code_list = []
+        temp_sample_code_list = []
+        valid_line_counter = 0
+        max_line = 8
+        for index_line, line in enumerate(code_list):
             line = line.strip()
             if line != '\n' and line != '':
                 print(line)
@@ -81,7 +135,38 @@ if __name__ == "__main__":
                             if i < len(tokenList) - 1 and tokenList[i + 1].value == '(':
                                 query_result = query_method(t.value, word_context_set, qute_counter)
                                 if query_result is not None:
+                                    for code_line in code_list[0:index_line]:
+                                        code_line = code_line.strip()
+                                        if code_line != '' and code_line != '\n':
+                                            valid_line_counter += 1
+                                            temp_sample_code_list.append(code_line)
+                                    if valid_line_counter > max_line / 2:
+                                        for s in temp_sample_code_list[valid_line_counter - max_line / 2:]:
+                                            sample_code_list.append(s)
+                                    elif len(temp_sample_code_list) > 0:
+                                        for s in temp_sample_code_list:
+                                            sample_code_list.append(s)
+                                    sample_code_list.append(line)
+                                    if len(code_list) > index_line + 1:
+                                        temp_sample_code_list = list()
+
+                                        valid_line_counter = 0
+                                        for code_line in code_list[index_line + 1:]:
+                                            if code_line != '' and code_line != '\n':
+                                                valid_line_counter += 1
+                                                temp_sample_code_list.append(code_line)
+                                        if valid_line_counter > max_line / 2:
+                                            for s in temp_sample_code_list[:max_line / 2]:
+                                                sample_code_list.append(s)
+                                        elif len(temp_sample_code_list) > 0:
+                                            for s in temp_sample_code_list:
+                                                sample_code_list.append(s)
+
                                     related_method_list.append(query_result)
+                                    method_json_data.append({"trace_id": trace.id,
+                                                             "method_record_id": query_result.method_id,
+                                                             "sample_code_list": sample_code_list,
+                                                             })
                 except Exception:
                     print("error")
                     continue
@@ -91,10 +176,12 @@ if __name__ == "__main__":
         for r_m in related_method_list:
             method_id_set.add(r_m.method_id)
         print(method_id_set)
-        json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
-        # json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
-        # json_conuter += 1
-        # if json_conuter > 100:
-        #     break
-    with open('data.json', 'w') as outfile:
+        if len(list(method_id_set)) > 0:
+            json_data.append({"trace_id": trace.id, "code": trace.code, "method_record_id": list(method_id_set)})
+            json_conuter += 1
+            if json_conuter > 30:
+                break
+    with open('data_2.json', 'w') as outfile:
         json.dump(json_data, outfile)
+    with open('sample_code.json', 'w') as outfile:
+        json.dump(method_json_data, outfile)

@@ -18,7 +18,7 @@ def update_by_className_methodName_param(className, methodName, param, code, jav
 
 def read_json_by_line(file_path):
     counter = 0
-    step = 1000
+    step = 3000
     with open(file_path, encoding='UTF-8') as f:
         for line in f.readlines():
             dic = json.loads(line)
