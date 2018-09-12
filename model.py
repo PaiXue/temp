@@ -54,6 +54,40 @@ class Traces(Base):
             return remote_instance
 
 
+class CodeSample(Base):
+    __tablename__ = 'code_sample'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    method_id = Column(Integer)
+    description = Column(Text())
+    type = Column(Integer)
+    raw_code = Column(String(1024))
+
+    def __init__(self, package_name, package_url, description):
+        self.package_name = package_name
+        self.package_url = package_url
+        self.description = description
+
+    def get_remote_object(self, session):
+        if self.package_id:
+            return self
+        else:
+            try:
+                return session.query(Traces).filter_by(package_name=self.package_name,
+                                                       package_url=self.package_url,
+                                                       description=self.description).first()
+            except Exception:
+                traceback.print_exc()
+            return None
+
+    def find_or_create(self, session, autocommit=True):
+        remote_instance = self.get_remote_object(session)
+        if not remote_instance:
+            session.add(self)
+            if autocommit:
+                session.commit()
+            return self
+        else:
+            return remote_instance
 class POIPackage(Base):
     __tablename__ = 'poi_package'
     package_id = Column(Integer, primary_key=True, autoincrement=True)
