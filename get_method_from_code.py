@@ -151,4 +151,5 @@ if __name__ == "__main__":
     session = EngineFactory.create_session(engine=engine, autocommit=False, echo=False)
     code = 'public void start(BundleContext context) throws Exception { \n}'
     print(get_method(code))
-
+    code = "/**\n* Get a parameter value\n*/\npublic String getParameter(String key, String def) { \n    return isStandalone ? System.getProperty(key, def) : (getParameter(key) != null ? getParameter(key) : def);\n}\n"
+    print(get_method(code))

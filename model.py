@@ -111,8 +111,8 @@ class POIPackage(Base):
         else:
             try:
                 return session.query(POIPackage).filter_by(package_name=self.package_name,
-                                                       package_url=self.package_url,
-                                                       description=self.description).first()
+                                                           package_url=self.package_url,
+                                                           description=self.description).first()
             except Exception:
                 traceback.print_exc()
             return None
@@ -150,10 +150,10 @@ class POIMultiClass(Base):
         else:
             try:
                 return session.query(POIMultiClass).filter_by(package_name=self.package_name,
-                                                       name=self.name,
-                                                       url=self.url,
-                                                       type=self.type,
-                                                       description=self.description).first()
+                                                              name=self.name,
+                                                              url=self.url,
+                                                              type=self.type,
+                                                              description=self.description).first()
             except Exception:
                 traceback.print_exc()
             return None
@@ -193,11 +193,11 @@ class POIMethod(Base):
         else:
             try:
                 return session.query(POIMethod).filter_by(package_name=self.package_name,
-                                                       class_name=self.class_name,
-                                                       return_type=self.return_type,
-                                                       method_name=self.method_name,
-                                                       description=self.description,
-                                                       type=self.type).first()
+                                                          class_name=self.class_name,
+                                                          return_type=self.return_type,
+                                                          method_name=self.method_name,
+                                                          description=self.description,
+                                                          type=self.type).first()
             except Exception:
                 traceback.print_exc()
                 session.rollback()
