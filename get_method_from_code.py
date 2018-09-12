@@ -149,5 +149,5 @@ if __name__ == "__main__":
     schema_name = 'domainkg'
     engine = EngineFactory.create_engine_by_schema_name(schema_name)
     session = EngineFactory.create_session(engine=engine, autocommit=False, echo=False)
-    code = ''
-    get_method(code)
+    code = 'public void start(BundleContext context) throws Exception { \n}'
+    print(get_method(code))
