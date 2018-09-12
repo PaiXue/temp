@@ -73,9 +73,11 @@ class CodeSample(Base):
             return self
         else:
             try:
-                return session.query(CodeSample).filter_by(package_name=self.package_name,
-                                                       package_url=self.package_url,
-                                                       description=self.description).first()
+                return session.query(CodeSample).filter_by(method_id=self.method_id,
+                                                           description=self.description,
+                                                           type=self.type,
+                                                           raw_code=self.raw_code,
+                                                           ).first()
             except Exception:
                 traceback.print_exc()
             return None
@@ -190,7 +192,7 @@ class POIMethod(Base):
             return self
         else:
             try:
-                return session.query(Traces).filter_by(package_name=self.package_name,
+                return session.query(POIMethod).filter_by(package_name=self.package_name,
                                                        class_name=self.class_name,
                                                        return_type=self.return_type,
                                                        method_name=self.method_name,
