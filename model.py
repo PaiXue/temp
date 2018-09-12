@@ -60,19 +60,20 @@ class CodeSample(Base):
     method_id = Column(Integer)
     description = Column(Text())
     type = Column(Integer)
-    raw_code = Column(String(1024))
+    raw_code = Column(LONGTEXT)
 
-    def __init__(self, package_name, package_url, description):
-        self.package_name = package_name
-        self.package_url = package_url
+    def __init__(self, method_id, description, type, raw_code):
+        self.method_id = method_id
         self.description = description
+        self.type = type
+        self.raw_code = raw_code
 
     def get_remote_object(self, session):
-        if self.package_id:
+        if self.id:
             return self
         else:
             try:
-                return session.query(Traces).filter_by(package_name=self.package_name,
+                return session.query(CodeSample).filter_by(package_name=self.package_name,
                                                        package_url=self.package_url,
                                                        description=self.description).first()
             except Exception:
@@ -88,6 +89,8 @@ class CodeSample(Base):
             return self
         else:
             return remote_instance
+
+
 class POIPackage(Base):
     __tablename__ = 'poi_package'
     package_id = Column(Integer, primary_key=True, autoincrement=True)
@@ -105,7 +108,7 @@ class POIPackage(Base):
             return self
         else:
             try:
-                return session.query(Traces).filter_by(package_name=self.package_name,
+                return session.query(POIPackage).filter_by(package_name=self.package_name,
                                                        package_url=self.package_url,
                                                        description=self.description).first()
             except Exception:
@@ -144,7 +147,7 @@ class POIMultiClass(Base):
             return self
         else:
             try:
-                return session.query(Traces).filter_by(package_name=self.package_name,
+                return session.query(POIMultiClass).filter_by(package_name=self.package_name,
                                                        name=self.name,
                                                        url=self.url,
                                                        type=self.type,
