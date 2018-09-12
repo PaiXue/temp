@@ -151,3 +151,4 @@ if __name__ == "__main__":
     session = EngineFactory.create_session(engine=engine, autocommit=False, echo=False)
     code = 'public void start(BundleContext context) throws Exception { \n}'
     print(get_method(code))
+
